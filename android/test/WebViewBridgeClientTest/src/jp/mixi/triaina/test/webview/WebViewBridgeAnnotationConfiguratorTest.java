@@ -1,17 +1,16 @@
 package jp.mixi.triaina.test.webview;
 
-import java.lang.reflect.Method;
-
-import jp.mixi.triaina.commons.collection.ImmutableHashMap;
 import jp.mixi.triaina.commons.exception.CommonRuntimeException;
+import jp.mixi.triaina.webview.InjectorHelper;
 import jp.mixi.triaina.webview.R;
-import jp.mixi.triaina.webview.BridgeConfig;
-import jp.mixi.triaina.webview.ConfigCache;
-import jp.mixi.triaina.webview.WebViewBridgeAnnotationConfigurator;
 import jp.mixi.triaina.webview.annotation.Bridge;
 import jp.mixi.triaina.webview.annotation.Domain;
 import jp.mixi.triaina.webview.annotation.Layout;
 import jp.mixi.triaina.webview.annotation.WebViewBridge;
+import jp.mixi.triaina.webview.config.BridgeMethodConfig;
+import jp.mixi.triaina.webview.config.BridgeObjectConfig;
+import jp.mixi.triaina.webview.config.ConfigCache;
+import jp.mixi.triaina.webview.config.WebViewBridgeAnnotationConfigurator;
 import jp.mixi.triaina.test.mock.MockParams;
 import android.app.Activity;
 import android.content.Context;
@@ -26,33 +25,40 @@ public class WebViewBridgeAnnotationConfiguratorTest extends AndroidTestCase {
 		super.setUp();
 		mConfigurator = new WebViewBridgeAnnotationConfigurator();
 		mConfigurator.setConfigCache(new ConfigCache());
+		mConfigurator.setContext(getContext());
+		mConfigurator.setInjectorHelper(new MockInjectorHenler());
 	}
 	
 	public void testLoadWebViewBridge() {
 		Activity activity = new MockActivity(getContext());
 		jp.mixi.triaina.webview.WebViewBridge bridge = mConfigurator.loadWebViewBridge(activity);
 		assertNotNull(bridge);
+		assertEquals(1, bridge.getDomainConfig().getDomains().length);
+		assertEquals("example.com", bridge.getDomainConfig().getDomains()[0]);
 	}
 
 	public void testConfigureBridge() {
 		MockActivity mock = new MockActivity(getContext());
 		jp.mixi.triaina.webview.WebViewBridge webViewBridge = new jp.mixi.triaina.webview.WebViewBridge(getContext());
-		mConfigurator.configureBridge(webViewBridge, mock);
+		mConfigurator.configure(webViewBridge, mock);
 		
-		BridgeConfig config = webViewBridge.getBridgeConfig();
-		ImmutableHashMap<String, Method> map = config.getMethodMap();
+		BridgeObjectConfig objectConfig = webViewBridge.getBridgeConfigSet();
+		BridgeMethodConfig methodConfig = objectConfig.get("aaa");
+		assertEquals("aaa", methodConfig.getMethod().getName());
 		
-		Method aaa = map.get("aaa");
-		Method bbb = map.get("bbb");
-
-		assertEquals("example.com", webViewBridge.getDomains()[0]);
-		assertEquals(mock, webViewBridge.getDeviceBridge());
-		assertEquals("aaa", aaa.getName());
-		assertEquals("bbb", bbb.getName());
+		methodConfig = objectConfig.get("bbb");
+		assertEquals("bbb", methodConfig.getMethod().getName());
 	}
 	
-	@Layout(R.layout.main)
+	static class MockInjectorHenler extends InjectorHelper {
+        @Override
+        public <T> T inject(Context context, T obj) {
+            return obj;
+        }
+	}
+	
 	@WebViewBridge(R.id.webview)
+	@Layout(R.layout.main)
 	@Domain("example.com")
 	static class MockActivity extends Activity {
 		Context context;

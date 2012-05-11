@@ -1,4 +1,4 @@
-package jp.mixi.triaina.webview;
+package jp.mixi.triaina.webview.config;
 
 public class LayoutConfig {
 	private int mLayoutId;

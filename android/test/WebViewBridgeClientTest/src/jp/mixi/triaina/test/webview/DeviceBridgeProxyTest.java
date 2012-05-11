@@ -1,21 +1,17 @@
 package jp.mixi.triaina.test.webview;
-import java.lang.reflect.Method;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.json.JSONObject;
 
 import android.os.Handler;
 import android.test.AndroidTestCase;
 
-import jp.mixi.triaina.commons.collection.ImmutableHashMap;
 import jp.mixi.triaina.commons.exception.InvocationRuntimeException;
-import jp.mixi.triaina.webview.BridgeConfig;
 import jp.mixi.triaina.webview.Callback;
 import jp.mixi.triaina.webview.DeviceBridgeProxy;
 import jp.mixi.triaina.webview.DeviceBridgeProxy.DummyCallback;
 import jp.mixi.triaina.webview.DeviceBridgeProxy.WebViewBridgeCallback;
+import jp.mixi.triaina.webview.config.BridgeMethodConfig;
+import jp.mixi.triaina.webview.config.BridgeObjectConfig;
 import jp.mixi.triaina.webview.WebViewBridge;
 import jp.mixi.triaina.test.mock.MockHandler;
 import jp.mixi.triaina.test.mock.MockParams;
@@ -23,32 +19,69 @@ import jp.mixi.triaina.test.mock.MockResult;
 
 public class DeviceBridgeProxyTest extends AndroidTestCase {
 
+    private WebViewBridge mWebViewBridge;
+    private BridgeObjectConfig mConfig1;
+    private BridgeObjectConfig mConfig2;
+    private DeviceBridge1 mBridge1;
+    private DeviceBridge2 mBridge2;
+    
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        
+        mWebViewBridge = new WebViewBridge(getContext());
+        
+        mConfig1 = new BridgeObjectConfig();
+        mBridge1 = new DeviceBridge1();
+        mConfig1.add(new BridgeMethodConfig("aaa",
+                mBridge1.getClass().getMethod("aaa", new Class[]{MockParams.class})));
+        mConfig1.add(new BridgeMethodConfig("bbb",
+                mBridge1.getClass().getMethod("bbb", new Class[]{MockParams.class, Callback.class})));
+        mConfig1.add(new BridgeMethodConfig("ccc",
+                mBridge1.getClass().getMethod("ccc", new Class[]{MockParams.class, Callback.class})));
+        
+        mConfig2 = new BridgeObjectConfig();
+        mBridge2 = new DeviceBridge2();
+        mConfig2.add(new BridgeMethodConfig("ddd",
+                mBridge2.getClass().getMethod("ddd", new Class[]{})));        
+    }
+    
 	public void testDeviceBridgeProxy() {
-		new DeviceBridgeProxy(mWebViewBridge,  new Object(), mConfig, new Handler());
+		new DeviceBridgeProxy(mWebViewBridge, new Handler());
 	}
 	
 	public void testNotifyToDevice() throws Exception {
-		DeviceBridgeProxy proxy = new DeviceBridgeProxy(mWebViewBridge, mBridge, mConfig, new MockHandler());
+		DeviceBridgeProxy proxy = new DeviceBridgeProxy(mWebViewBridge, new MockHandler());
+		proxy.addBridgeObjectConfig(mBridge1, mConfig1);
 		proxy.notifyToDevice("{'bridge':'" + WebViewBridge.VERSION + "', 'dest':'aaa', 'params':{'aaa':'aaa', 'bbb': 'bbb'}}");
-		assertEquals("aaa", mBridge.params.getAaa());
-		assertEquals("bbb", mBridge.params.getBbb());
+		assertEquals("aaa", mBridge1.params.getAaa());
+		assertEquals("bbb", mBridge1.params.getBbb());
 	}
 	
 	public void testNotifyToDeviceUseCallback() throws Exception {
-		DeviceBridgeProxy proxy = new DeviceBridgeProxy(mWebViewBridge, mBridge, mConfig, new MockHandler());
+		DeviceBridgeProxy proxy = new DeviceBridgeProxy(mWebViewBridge, new MockHandler());
+		proxy.addBridgeObjectConfig(mBridge1, mConfig1);
 		proxy.notifyToDevice("{'bridge':'" + WebViewBridge.VERSION + "', 'id': '1', 'dest':'bbb', 'params':{'aaa':'aaa', 'bbb': 'bbb'}}");
-		assertEquals(WebViewBridgeCallback.class, mBridge.callback.getClass());
-		assertEquals("aaa", mBridge.params.getAaa());
-		assertEquals("bbb", mBridge.params.getBbb());		
+		assertEquals(WebViewBridgeCallback.class, mBridge1.callback.getClass());
+		assertEquals("aaa", mBridge1.params.getAaa());
+		assertEquals("bbb", mBridge1.params.getBbb());		
 	}
 	
 	public void testNotifyToDeviceUseDummyCallback() throws Exception {
-		DeviceBridgeProxy proxy = new DeviceBridgeProxy(mWebViewBridge, mBridge, mConfig, new MockHandler());
+		DeviceBridgeProxy proxy = new DeviceBridgeProxy(mWebViewBridge, new MockHandler());
+		proxy.addBridgeObjectConfig(mBridge1, mConfig1);
 		proxy.notifyToDevice("{'bridge':'" + WebViewBridge.VERSION + "', 'dest':'ccc', 'params':{'aaa':'aaa', 'bbb': 'bbb'}}");
-		assertEquals(DummyCallback.class, mBridge.callback.getClass());
-		assertEquals("aaa", mBridge.params.getAaa());
-		assertEquals("bbb", mBridge.params.getBbb());
+		assertEquals(DummyCallback.class, mBridge1.callback.getClass());
+		assertEquals("aaa", mBridge1.params.getAaa());
+		assertEquals("bbb", mBridge1.params.getBbb());
 	}
+	
+	public void testNotifyToDeviceNoArgument() {
+        DeviceBridgeProxy proxy = new DeviceBridgeProxy(mWebViewBridge, new MockHandler());
+        proxy.addBridgeObjectConfig(mBridge2, mConfig2);
+        proxy.notifyToDevice("{'bridge':'" + WebViewBridge.VERSION + "', 'dest':'ddd', 'params':{}}");
+        assertEquals(true, mBridge2.called);
+    }
 	
 	public void testValidateParamsVersion() throws Exception {
 		JSONObject json = new JSONObject();
@@ -77,7 +110,7 @@ public class DeviceBridgeProxyTest extends AndroidTestCase {
 		}
 	}
 
-	static class DeviceBridge {
+	static class DeviceBridge1 {
 		private MockParams params;
 		private Callback<MockResult> callback;
 		
@@ -97,6 +130,13 @@ public class DeviceBridgeProxyTest extends AndroidTestCase {
 		}
 	}
 	
+	static class DeviceBridge2 {
+	    private boolean called;
+	    public void ddd() {
+	        called = true;
+	    }
+	}
+	
 	static class MockDeviceBridgeProxy extends DeviceBridgeProxy {
 		@Override
 		public void validateParamsVersion(JSONObject json) {
@@ -104,31 +144,7 @@ public class DeviceBridgeProxyTest extends AndroidTestCase {
 		}
 
 		public MockDeviceBridgeProxy() {
-			super(null, null, null, null);
+			super(null, null);
 		}
-	}
-
-	private WebViewBridge mWebViewBridge;
-	private DeviceBridge mBridge;
-	private BridgeConfig mConfig;
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		mWebViewBridge = new WebViewBridge(getContext());
-		mBridge = new DeviceBridge();
-		Map<String, Method> map = new HashMap<String, Method>();
-		
-		Method met = mBridge.getClass().getMethod("aaa", new Class[]{MockParams.class});
-		map.put("aaa", met);
-		
-		met = mBridge.getClass().getMethod("bbb", new Class[]{MockParams.class, Callback.class});
-		map.put("bbb", met);
-		
-		met = mBridge.getClass().getMethod("ccc", new Class[]{MockParams.class, Callback.class});
-		map.put("ccc", met);
-		
-		mConfig = new BridgeConfig(new String[]{"domain"}, new ImmutableHashMap<String, Method>(map));
 	}
 }

@@ -3,10 +3,7 @@ package jp.mixi.triaina.webview;
 import jp.mixi.triaina.webview.AbstractWebViewBridgeActivity;
 import jp.mixi.triaina.webview.annotation.Domain;
 import jp.mixi.triaina.webview.annotation.Layout;
-import jp.mixi.triaina.webview.annotation.NetBrowserOpenParams;
 import jp.mixi.triaina.webview.annotation.WebViewBridge;
-import jp.mixi.triaina.webview.entity.device.FormPictureSelectParams;
-import jp.mixi.triaina.webview.entity.device.FormPictureSelectResult;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -69,18 +66,4 @@ public class TriainaWebViewBridgeClientActivity extends AbstractWebViewBridgeAct
     	getWebViewBridge().getSettings().setJavaScriptEnabled(true);
     }
 
-	@Override
-	public void doFormPictureSelect(FormPictureSelectParams params, Callback<FormPictureSelectResult> callback) {
-		
-	}
-
-	@Override
-	public void doNetBrowserOpen(NetBrowserOpenParams params) {
-		
-	}
-
-	@Override
-	public void doWebError() {
-		
-	}
 }

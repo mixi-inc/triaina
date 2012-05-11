@@ -1,12 +1,9 @@
 package jp.mixi.triaina.test.webview;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-
-import jp.mixi.triaina.commons.collection.ImmutableHashMap;
-import jp.mixi.triaina.webview.BridgeConfig;
-import jp.mixi.triaina.webview.ConfigCache;
-import jp.mixi.triaina.webview.LayoutConfig;
+import jp.mixi.triaina.webview.config.BridgeMethodConfig;
+import jp.mixi.triaina.webview.config.BridgeObjectConfig;
+import jp.mixi.triaina.webview.config.ConfigCache;
+import jp.mixi.triaina.webview.config.LayoutConfig;
 import junit.framework.TestCase;
 
 public class ConfigCacheTest extends TestCase {
@@ -23,18 +20,18 @@ public class ConfigCacheTest extends TestCase {
 		assertNotNull(config);
 	}
 
-	public void testGetAndPutBridgeConfig() {
+	public void testGetAndPutBridgeConfigSet() {
 		ConfigCache cache = new ConfigCache();
-		BridgeConfig config = cache.getBridgeConfig(getClass());
+		BridgeObjectConfig config = cache.getBridgeObjectConfig(getClass());
 		
 		assertNull(config);
 		
-		config = new BridgeConfig(new String[]{"example.com"}, new ImmutableHashMap<String, Method>(new HashMap<String, Method>()));
-		cache.putBridgeConfig(getClass(), config);
+		config = new BridgeObjectConfig();
+		config.add(new BridgeMethodConfig(null, null));
 		
-		config = cache.getBridgeConfig(getClass());
-		assertEquals("example.com", config.getDomains()[0]);
-		assertNotNull(config);
-		assertNotNull(cache.getBridgeConfig(getClass()));
+		cache.putBridgeObjectConfig(getClass(), config);
+		BridgeObjectConfig newObjectConfig = cache.getBridgeObjectConfig(getClass());
+		
+		assertEquals(config, newObjectConfig);
 	}
 }

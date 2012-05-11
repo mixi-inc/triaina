@@ -1,4 +1,4 @@
-package jp.mixi.triaina.webview.annotation;
+package jp.mixi.triaina.webview.entity.device;
 
 import android.os.Parcel;
 import android.os.Parcelable;
