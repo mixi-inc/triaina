@@ -4,9 +4,9 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="/MixiMain/libs/guice-3.0-no_aop.jar"/>
-	<classpathentry kind="lib" path="/MixiMain/libs/javax.inject-1.jar"/>
-	<classpathentry kind="lib" path="/MixiMain/libs/roboguice-2.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/MixiMain/libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="../lib/guice-3.0-no_aop.jar"/>
+	<classpathentry kind="lib" path="../lib/javax.inject-1.jar"/>
+	<classpathentry kind="lib" path="../lib/roboguice-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="../lib/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
