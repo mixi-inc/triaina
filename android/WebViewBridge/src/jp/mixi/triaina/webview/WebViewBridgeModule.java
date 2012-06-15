@@ -14,5 +14,6 @@ public class WebViewBridgeModule extends AbstractTriainaModule {
 		bind(WebViewBridgeConfigurator.class).to(WebViewBridgeAnnotationConfigurator.class).in(ContextSingleton.class);
 		bind(ConfigCache.class).in(Singleton.class);
 		bind(InjectorHelper.class).in(ContextSingleton.class);
+		bind(ProgressManager.class).in(ContextSingleton.class);
 	}
 }
