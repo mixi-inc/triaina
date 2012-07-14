@@ -506,4 +506,23 @@ public class MockContext extends Context {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void startActivities(Intent[] arg0, Bundle arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startActivity(Intent arg0, Bundle arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startIntentSender(IntentSender arg0, Intent arg1, int arg2,
+			int arg3, int arg4, Bundle arg5) throws SendIntentException {
+		// TODO Auto-generated method stub
+		
+	}
 }

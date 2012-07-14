@@ -173,7 +173,7 @@ public class AbstractTriainaModuleTest extends TestCase {
 		}
 
 		@Override
-		public Binder skipSources(Class... classesToSkip) {
+		public Binder skipSources(@SuppressWarnings("rawtypes") Class... classesToSkip) {
 			// TODO Auto-generated method stub
 			return null;
 		}
