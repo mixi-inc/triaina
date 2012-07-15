@@ -21,85 +21,113 @@ import jp.mixi.triaina.webview.entity.device.FormPictureSelectResult;
 import jp.mixi.triaina.webview.entity.device.NetBrowserOpenParams;
 import jp.mixi.triaina.webview.entity.device.NotificationParams;
 
-public abstract class AbstractWebViewBridgeFragment extends AbstractTriainaFragment {
+public abstract class AbstractWebViewBridgeFragment extends
+		AbstractTriainaFragment {
 	private WebViewBridge mWebViewBridge;
-	
+
 	@Inject
 	private WebViewBridgeConfigurator mConfigurator;
 	
 	@Inject
+	private WebViewRestoreManager mRestoreManager;
+
+	@Inject
 	private TriainaEnvironment mEnvironment;
-	
+
+	private boolean mIsRestored;
 	
 	final public String[] getDomains() {
 		return mWebViewBridge.getDomainConfig().getDomains();
 	}
-	
+
 	public void call(String channel, Params params) {
 		mWebViewBridge.call(channel, params);
 	}
-	
+
 	public void call(String channel, Params params, Callback<?> callback) {
 		mWebViewBridge.call(channel, params, callback);
 	}
-	
+
 	final public WebViewBridge getWebViewBridge() {
 		return mWebViewBridge;
 	}
-	
-    final public WebViewBridgeConfigurator getConfigurator() {
-        return mConfigurator;
-    }
+
+	final public WebViewBridgeConfigurator getConfigurator() {
+		return mConfigurator;
+	}
 
 	@Bridge("system.environment.set")
 	public void doEnvironmentSet(EnvironmentSetParams params) {
 		mEnvironment.set(params.getName(), params.getValue());
 	}
-	
+
 	@Bridge("system.notification.notify")
 	public void doNotificationNotify(NotificationParams params) {
 		Toast.makeText(getActivity(), params.getMessage(), Toast.LENGTH_SHORT).show();
 	}
-	
+
 	@Bridge("system.form.picture.select")
-	public void doFormPictureSelect(FormPictureSelectParams params, Callback<FormPictureSelectResult> callback) {
-		//TODO need to implement Triaina Framework original logic
+	public void doFormPictureSelect(FormPictureSelectParams params,
+			Callback<FormPictureSelectResult> callback) {
+		// TODO need to implement Triaina Framework original logic
 	}
-	
+
 	@Bridge("system.net.browser.open")
 	public void doNetBrowserOpen(NetBrowserOpenParams params) {
-		SystemUtils.launchExternalBrowser(getActivity(), Uri.parse(params.getUrl()), getClass());
+		SystemUtils.launchExternalBrowser(getActivity(),
+				Uri.parse(params.getUrl()), getClass());
 	}
-	
+
 	@Bridge("system.web.error")
 	public void doWebError() {
-		//ignore
+		// ignore
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-	    mWebViewBridge = mConfigurator.loadWebViewBridge(getActivity());
-	    mConfigurator.configure(mWebViewBridge);
-		return mWebViewBridge;
+		View inflatedView =
+				mConfigurator.loadInflatedView(this, inflater, container);
+		mWebViewBridge = mConfigurator.loadWebViewBridge(this, inflatedView);
+		mConfigurator.configure(mWebViewBridge);
+		mConfigurator.configureSetting(mWebViewBridge);
+		setClients();
+		
+		mIsRestored = mRestoreManager.restoreWebView(mWebViewBridge, savedInstanceState);
+		return inflatedView;
+	}
+	
+	protected void setClients() {
+		mWebViewBridge.setWebChromeClient(new TriainaWebChromeClient(getActivity()));
+		mWebViewBridge.setWebViewClient(new TriainaWebViewClient());
 	}
 	
 	@Override
-    public void onResume() {
-	    super.onResume();
-	    mWebViewBridge.resume();
-    }
-	
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		//XXX
+		if (mWebViewBridge != null)
+			mRestoreManager.storeWebView(mWebViewBridge, outState, getActivity().getTaskId());
+	}
+
 	@Override
-    public void onPause() {
+	public void onResume() {
+		super.onResume();
+		mWebViewBridge.resume();
+	}
+
+	@Override
+	public void onPause() {
 		mWebViewBridge.pause();
 		super.onPause();
-    }
-	
-	@Override
-    public void onDestroyView() {
-		mWebViewBridge.destroy();
-		super.onDestroyView();
-    }
+	}
 
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+	}
+	
+	public boolean isRestored() {
+		return mIsRestored;
+	}
 }

@@ -10,8 +10,11 @@ import jp.mixi.triaina.webview.WebViewBridge;
 import jp.mixi.triaina.webview.annotation.Bridge;
 import jp.mixi.triaina.webview.entity.device.NotifyStatusResult;
 import jp.mixi.triaina.webview.entity.device.WebStatusParams;
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 
+@SuppressLint("UseSparseArrays")
+@SuppressWarnings("deprecation")
 public class WebStatusBridge implements BridgeObject {
     public static final Map<Integer, String> ORIENTATION_MAP;
     static {
