@@ -185,8 +185,14 @@ public class WebViewBridge extends WebView {
     @Override
     public void destroy() {
         mDeviceBridgeProxy.destroy();
-        super.destroy();
-        isDestroyed = true;
+        
+        //workaround for some device
+        try {
+        	super.destroy();
+        } catch (Exception epx) {	
+        } finally {
+        	isDestroyed = true;
+        }
     }
 
     public static class WebViewClientProxy extends WebViewClient {

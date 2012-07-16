@@ -133,6 +133,7 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mWebViewBridge.destroy();
     }
 
     public static void startActivityForResult(Activity activity, Class<?> clazz, String url) {

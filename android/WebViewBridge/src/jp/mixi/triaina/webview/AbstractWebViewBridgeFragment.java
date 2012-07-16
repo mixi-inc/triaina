@@ -1,6 +1,5 @@
 package jp.mixi.triaina.webview;
 
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -130,6 +129,7 @@ public abstract class AbstractWebViewBridgeFragment extends
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
+		mWebViewBridge.destroy();
 	}
 	
 	public boolean isRestored() {
