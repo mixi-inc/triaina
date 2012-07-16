@@ -1,5 +1,6 @@
 package jp.mixi.triaina.webview;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -92,14 +93,18 @@ public abstract class AbstractWebViewBridgeFragment extends
 		mConfigurator.configure(mWebViewBridge);
 		mConfigurator.configureSetting(mWebViewBridge);
 		setClients();
-		
-		mIsRestored = mRestoreManager.restoreWebView(mWebViewBridge, savedInstanceState);
 		return inflatedView;
 	}
 	
 	protected void setClients() {
 		mWebViewBridge.setWebChromeClient(new TriainaWebChromeClient(getActivity()));
 		mWebViewBridge.setWebViewClient(new TriainaWebViewClient());
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		mIsRestored = mRestoreManager.restoreWebView(mWebViewBridge, savedInstanceState);
 	}
 	
 	@Override

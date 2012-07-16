@@ -22,7 +22,7 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 
 public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
-    private static final String EXTRA_URL = "_url";
+    public static final String EXTRA_URL = "_url";
 
     private WebViewBridge mWebViewBridge;
 
@@ -132,7 +132,6 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
 
     @Override
     protected void onDestroy() {
-        mWebViewBridge.destroy();
         super.onDestroy();
     }
 
