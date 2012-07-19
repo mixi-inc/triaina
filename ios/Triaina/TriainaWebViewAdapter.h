@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define kTriainaBridgeURLScheme @"triaina-bridge"
-
 @interface TriainaWebViewAdapter : NSObject <UIWebViewDelegate> {
     id webViewDelegate;
     id webBridgeDelegate;
@@ -22,20 +20,16 @@
 @property (assign, nonatomic) IBOutlet UIWebView *webView;
 
 - (id)initWithWebView:(UIWebView *)webView;
+
 - (SEL)deviceHandlerForChannel:(NSString *)channel isRequest:(BOOL)isRequest;
 - (SEL)deviceResponderForChannel:(NSString *)channel;
 - (void)receivedDeviceNotification:(NSDictionary*)notify;
 - (NSString *)sendWebNotificationWithChannel:(NSString*)channel params:(NSDictionary *)params;
 - (void)respondWithResult:(NSDictionary *)result bridgeId:(NSString *)bridgeId;
 
-// default handler
+// default handler/sender
 - (void)handleSystemWebStatusRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
-- (void)handleSystemDialogConfirmRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
-- (void)handleSystemNetWebviewOpenRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
-- (void)handleSystemFormPictureSelectRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
 - (void)handleErrorWithCode:(NSString *)code message:(NSString *)message;
-
-// default sender
 - (void)sendErrorWithCode:(NSString *)code message:(NSString*)message bridgeId:(NSString *)bridgeId;
 
 @end

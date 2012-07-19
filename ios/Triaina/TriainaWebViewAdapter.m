@@ -8,9 +8,9 @@
 
 #import "TriainaWebViewAdapter.h"
 #import "TriainaConfig.h"
-#import "JSON.h"
-#import "NSData+Sha256Hash.h"
-#import "UIAlertView+BlocksExtension.h"
+#import "SBJson.h"
+
+#define kTriainaBridgeURLScheme @"triaina-bridge"
 
 @interface TriainaWebViewAdapter()
 
@@ -29,7 +29,7 @@
     self = [super init];
     if(self) {
         self.webView = aWebView;
-        self.sessionKey = [[[NSString stringWithFormat:@"%d-triaina-%d", rand(), rand()] dataUsingEncoding:NSASCIIStringEncoding] sha1Hash];
+        self.sessionKey = [NSString stringWithFormat:@"%x", rand()];
     }
     return self;
 }
@@ -77,7 +77,7 @@
 }
 
 - (void)receivedDeviceNotification:(NSDictionary*)notify 
-{    
+{
     // TODO check version
     // NSString *version = [notify objectForKey:@"bridge"];
     
@@ -94,6 +94,8 @@
         return;
     }
     
+    NSLog(@"[Triaina] received: %@", notify);
+    
     NSString *channel = [notify objectForKey:@"dest"];
     NSString *bridgeId = [notify objectForKey:@"id"];
     BOOL isRequest = ([notify objectForKey:@"params"] != nil);
@@ -105,16 +107,19 @@
     } else if([self respondsToSelector:selector]) {
         [self performSelector:selector withObject:params withObject:bridgeId];
     } else {
-        [self sendErrorWithCode:@"404" message:[NSString stringWithFormat:@"unknown channel:%@", channel] bridgeId:bridgeId];
+        NSLog(@"[Triaina] channel: %@ is unsupported", channel);
+        [self sendErrorWithCode:@"404" message:[NSString stringWithFormat:@"unsupported channel:%@", channel] bridgeId:bridgeId];
     }
 }
 
 - (void)notifyToWeb:(NSDictionary*)notify 
-{    
-    NSString *json = notify.JSONRepresentation;
+{
+    NSString *json = [notify JSONRepresentation];
     NSString *call = [NSString stringWithFormat:@"WebBridge.notifyToWeb('%@');", 
                       [json stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
     [webView stringByEvaluatingJavaScriptFromString:call];
+    
+    NSLog(@"[Triaina] sent: %@", notify);
 }
 
 - (NSString *)sendWebNotificationWithChannel:(NSString*)channel params:(NSDictionary *)params 
@@ -151,36 +156,9 @@
                    bridgeId:bridgeId];
 }
 
-- (void)handleSystemDialogConfirmRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId
-{
-    [[[[UIAlertView alloc] 
-       initWithTitle:[params objectForKey:@"title"] 
-       message:[params objectForKey:@"body"] 
-       callback:^(NSInteger index) {
-           NSNumber *value = [NSNumber numberWithBool:(index == 1)];
-           NSDictionary *result = [NSDictionary dictionaryWithObject:value forKey:@"value"];
-           [self respondWithResult:result bridgeId:bridgeId];
-       } 
-       cancelButtonTitle:@"キャンセル" 
-       otherButtonTitles:@"OK", nil] 
-      autorelease] show];
-}
-
-- (void)handleSystemNetWebviewOpenRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId
-{
-    NSURL *URL = [NSURL URLWithString:[params objectForKey:@"url"]];
-    [webView loadRequest:[NSURLRequest requestWithURL:URL]];
-}
-
-- (void)handleSystemFormPictureSelectRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId
-{
-    // no default impl.
-}
-
 - (void)handleErrorWithCode:(NSString *)code message:(NSString *)message {
+    NSLog(@"[Triaina] received error(%@): %@", code, message);
 }
-
-#pragma mark - Default Senders
 
 - (void)sendErrorWithCode:(NSString *)code message:(NSString*)message bridgeId:(NSString *)bridgeId
 {
@@ -202,18 +180,19 @@
 {
     if(triainaEnabled && [request.URL.scheme isEqualToString:kTriainaBridgeURLScheme]) {
         NSString *path = request.URL.path;
-        NSString *key = [path substringWithRange:NSMakeRange(1, 40)];
-        NSString *json = [path substringFromIndex:(1 + 40 + 1)];
+        NSString *key = [path substringWithRange:NSMakeRange(1, sessionKey.length)];
+        NSString *json = [path substringFromIndex:(1 + sessionKey.length + 1)];
         
         if(![key isEqualToString:sessionKey]) {
-            NSLog(@"invalid session-key: %@", key);
+            NSLog(@"[Triaina] invalid session-key: %@", key);
+            return NO;
         }
         
         NSDictionary *notify = [json JSONValue];
         if(notify) {
             [self receivedDeviceNotification:notify];
         } else {
-            NSLog(@"broken json: %@", json);
+            NSLog(@"[Triaina] broken json: %@", json);
         }
         return NO;
     }
