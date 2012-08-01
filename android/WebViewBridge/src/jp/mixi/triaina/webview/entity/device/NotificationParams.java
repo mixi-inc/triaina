@@ -6,28 +6,35 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class NotificationParams implements Params {
-	private Integer mMessageLevel;
-	private String mMessage;
+	private Integer mPriority;
+	private String mTitle;
+	private String mText;
 
 	public NotificationParams() {}
 	
 	public NotificationParams(Parcel source) {
-		mMessageLevel = source.readInt();
-		mMessage = source.readString();
+		mPriority = source.readInt();
+		mTitle = source.readString();
+		mText = source.readString();
 	}
 	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(mMessageLevel);
-		dest.writeString(mMessage);
+		dest.writeInt(mPriority);
+		dest.writeString(mTitle);
+		dest.writeString(mText);
 	}
 	
-	public Integer getMessageLevel() {
-		return mMessageLevel;
+	public Integer getPriority() {
+		return mPriority;
 	}
 	
-	public String getMessage() {
-		return mMessage;
+	public String getTitle() {
+		return mTitle;
+	}
+	
+	public String getText() {
+		return mText;
 	}
 
 	@Override

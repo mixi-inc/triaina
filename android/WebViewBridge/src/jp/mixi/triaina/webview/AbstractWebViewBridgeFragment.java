@@ -19,7 +19,7 @@ import jp.mixi.triaina.webview.entity.device.EnvironmentSetParams;
 import jp.mixi.triaina.webview.entity.device.FormPictureSelectParams;
 import jp.mixi.triaina.webview.entity.device.FormPictureSelectResult;
 import jp.mixi.triaina.webview.entity.device.NetBrowserOpenParams;
-import jp.mixi.triaina.webview.entity.device.NotificationParams;
+import jp.mixi.triaina.webview.entity.device.ToastParams;
 
 public abstract class AbstractWebViewBridgeFragment extends
 		AbstractTriainaFragment {
@@ -61,8 +61,8 @@ public abstract class AbstractWebViewBridgeFragment extends
 		mEnvironment.set(params.getName(), params.getValue());
 	}
 
-	@Bridge("system.notification.notify")
-	public void doNotificationNotify(NotificationParams params) {
+	@Bridge("system.toast.show")
+	public void doToastShow(ToastParams params) {
 		Toast.makeText(getActivity(), params.getMessage(), Toast.LENGTH_SHORT).show();
 	}
 

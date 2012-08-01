@@ -14,6 +14,7 @@ import jp.mixi.triaina.webview.annotation.Bridge;
 import jp.mixi.triaina.webview.annotation.Domain;
 import jp.mixi.triaina.webview.annotation.Layout;
 import jp.mixi.triaina.webview.bridges.NetHttpSendBridge;
+import jp.mixi.triaina.webview.bridges.NotificationBridge;
 import jp.mixi.triaina.webview.bridges.SensorAccelerometerBridge;
 import jp.mixi.triaina.webview.bridges.VibratorBridge;
 import jp.mixi.triaina.webview.bridges.WebStatusBridge;
@@ -122,7 +123,8 @@ public class WebViewBridgeAnnotationConfigurator implements
 		configure(bridge, new WiFiBridge(bridge));
 		configure(bridge, new VibratorBridge());
 		configure(bridge, new SensorAccelerometerBridge(bridge));
-
+		configure(bridge, new NotificationBridge(bridge));
+		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 			configure(bridge, new WiFiP2PBridge(bridge));
 	}

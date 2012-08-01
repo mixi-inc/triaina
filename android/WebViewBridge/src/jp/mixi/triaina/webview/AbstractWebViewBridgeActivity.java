@@ -13,7 +13,7 @@ import jp.mixi.triaina.webview.entity.device.FormPictureSelectParams;
 import jp.mixi.triaina.webview.entity.device.FormPictureSelectResult;
 import jp.mixi.triaina.webview.entity.device.NetBrowserOpenParams;
 import jp.mixi.triaina.webview.entity.device.NewWindowParams;
-import jp.mixi.triaina.webview.entity.device.NotificationParams;
+import jp.mixi.triaina.webview.entity.device.ToastParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -60,11 +60,11 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
         mEnvironment.set(params.getName(), params.getValue());
     }
 
-    @Bridge("system.notification.notify")
-    public void doNotificationNotify(NotificationParams params) {
+    @Bridge("system.toast.show")
+    public void doToastShow(ToastParams params) {
         Toast.makeText(this, params.getMessage(), Toast.LENGTH_SHORT).show();
     }
-
+    
     @Bridge("system.form.picture.select")
     public void doFormPictureSelect(FormPictureSelectParams params, Callback<FormPictureSelectResult> callback) {
         // TODO need to implement Triaina Framework original logic

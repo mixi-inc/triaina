@@ -25,6 +25,7 @@ public class TriainaWebViewClient extends WebViewClient {
         Log.d(TAG, "onReceivedError");
     }
 
+    @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         view.loadUrl(url);
         return true;
