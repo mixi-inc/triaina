@@ -77,7 +77,7 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
     
     @Bridge("system.net.browser.open")
     public void doNetBrowserOpen(NetBrowserOpenParams params) {
-        SystemUtils.launchExternalBrowser(this, Uri.parse(params.getUrl()), getClass());
+        SystemUtils.launchExternalBrowser(this, Uri.parse(params.getUrl()));
     }
 
     @Bridge("system.web.error")

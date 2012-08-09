@@ -74,8 +74,7 @@ public abstract class AbstractWebViewBridgeFragment extends
 
 	@Bridge("system.net.browser.open")
 	public void doNetBrowserOpen(NetBrowserOpenParams params) {
-		SystemUtils.launchExternalBrowser(getActivity(),
-				Uri.parse(params.getUrl()), getClass());
+		SystemUtils.launchExternalBrowser(getActivity(),	Uri.parse(params.getUrl()));
 	}
 
 	@Bridge("system.web.error")
