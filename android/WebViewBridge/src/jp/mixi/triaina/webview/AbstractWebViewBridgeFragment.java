@@ -90,6 +90,7 @@ public abstract class AbstractWebViewBridgeFragment extends
 				mConfigurator.loadInflatedView(this, inflater, container);
 		mWebViewBridge = mConfigurator.loadWebViewBridge(this, inflatedView);
 		mConfigurator.configure(mWebViewBridge);
+		mConfigurator.configure(mWebViewBridge, this);
 		mConfigurator.configureSetting(mWebViewBridge);
 		setClients();
 		return inflatedView;
