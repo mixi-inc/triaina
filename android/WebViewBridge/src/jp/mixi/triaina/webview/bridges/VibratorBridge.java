@@ -10,23 +10,31 @@ import jp.mixi.triaina.webview.entity.device.VibratorVibrateParams;
 public class VibratorBridge implements BridgeObject {
 	@Inject
 	private Vibrator mVibrator;
-	
+
 	@Bridge("system.vibrator.vibrate")
 	public void doVibrate(VibratorVibrateParams params) {
 		Integer r = params.getRepeat();
-		mVibrator.vibrate(ArrayUtils.convert(params.getPattern()), r == null ? -1 : r.intValue());
+		if (r == null)
+			mVibrator.vibrate(params.getMsec());
+		else
+			mVibrator.vibrate(ArrayUtils.convert(params.getPattern()), r == null ? -1 : r.intValue());
 	}
-	
-    @Override
-    public void onResume() {        
-    }
 
-    @Override
-    public void onPause() {
-        mVibrator.cancel();        
-    }
+	@Bridge("system.vibrator.cancel")
+	public void doCancel() {
+		mVibrator.cancel();
+	}
 
-    @Override
-    public void onDestroy() {
-    }
+	@Override
+	public void onResume() {
+	}
+
+	@Override
+	public void onPause() {
+		doCancel();
+	}
+
+	@Override
+	public void onDestroy() {
+	}
 }

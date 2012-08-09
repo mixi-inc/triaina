@@ -8,18 +8,21 @@ import android.os.Parcelable;
 public class VibratorVibrateParams implements Params {
 	private Long[] mPattern;
 	private Integer mRepeat;
+	private Long mMsec;
 	
 	public VibratorVibrateParams() {}
 	
 	public VibratorVibrateParams(Parcel source) {
 		mPattern = (Long[])source.readArray(VibratorVibrateParams.class.getClassLoader());
 		mRepeat = source.readInt();
+		mMsec = source.readLong();
 	}
 	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeArray(mPattern);
 		dest.writeInt(mRepeat);
+		dest.writeLong(mMsec);
 	}
 	
 	public Long[] getPattern() {
@@ -36,6 +39,14 @@ public class VibratorVibrateParams implements Params {
 	
 	public Integer getRepeat() {
 		return mRepeat;
+	}
+	
+	public Long getMsec() {
+		return mMsec;
+	}
+	
+	public void setMillisecound(Long msec) {
+		mMsec = msec;
 	}
 
 	@Exclude

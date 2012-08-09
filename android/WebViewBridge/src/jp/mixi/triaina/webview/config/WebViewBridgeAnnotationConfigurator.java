@@ -156,7 +156,9 @@ public class WebViewBridgeAnnotationConfigurator implements
 			Bridge chAnn = method.getAnnotation(Bridge.class);
 			if (chAnn != null) {
 				if (validDestinationMethod(method)) {
-					Log.d(TAG, "dest:" + method.getName());
+					Log.d(TAG, "dest:" + chAnn.value());
+					Log.d(TAG, "method:" + method.getName());
+					
 					BridgeMethodConfig config = new BridgeMethodConfig(
 							chAnn.value(), method);
 					configSet.add(config);
