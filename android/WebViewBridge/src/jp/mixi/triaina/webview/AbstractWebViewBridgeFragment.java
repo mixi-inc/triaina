@@ -90,12 +90,16 @@ public abstract class AbstractWebViewBridgeFragment extends
 		mWebViewBridge = mConfigurator.loadWebViewBridge(this, inflatedView);
 		mConfigurator.configure(mWebViewBridge);
 		mConfigurator.configure(mWebViewBridge, this);
-		mConfigurator.configureSetting(mWebViewBridge);
-		setClients();
+		configureSettings();
+		configureClients();
 		return inflatedView;
 	}
 	
-	protected void setClients() {
+	protected void configureSettings() {
+        mConfigurator.configureSetting(mWebViewBridge);	    
+	}
+	
+	protected void configureClients() {
 		mWebViewBridge.setWebChromeClient(new TriainaWebChromeClient(getActivity()));
 		mWebViewBridge.setWebViewClient(new TriainaWebViewClient());
 	}
@@ -105,13 +109,17 @@ public abstract class AbstractWebViewBridgeFragment extends
 		super.onActivityCreated(savedInstanceState);
 		mIsRestored = mRestoreManager.restoreWebView(mWebViewBridge, savedInstanceState);
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		//XXX
 		if (mWebViewBridge != null)
-			mRestoreManager.storeWebView(mWebViewBridge, outState, getActivity().getTaskId());
+		    storeWebView(outState);
+	}
+
+	protected void storeWebView(Bundle outState) {
+        mRestoreManager.storeWebView(mWebViewBridge, outState, getActivity().getTaskId());
 	}
 
 	@Override

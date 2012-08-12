@@ -199,6 +199,8 @@ public class WebViewBridgeAnnotationConfigurator implements
 		settings.setDomStorageEnabled(true);
 		File databasePath = new File(mContext.getCacheDir(), "webstorage");
 		settings.setDatabasePath(databasePath.toString());
+		settings.setAppCacheEnabled(true);
+		settings.setAppCacheMaxSize(1024 * 1024 * 4);
 	}
 
 	// for test

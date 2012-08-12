@@ -90,20 +90,31 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
         super.onCreate(savedInstanceState);
         mWebViewBridge = mConfigurator.loadWebViewBridge(this);
         mConfigurator.configure(mWebViewBridge);
-        mConfigurator.configureSetting(mWebViewBridge);
-        setClients();
-        
-        if (!mRestoreManager.restoreWebView(mWebViewBridge, savedInstanceState)) {
-            String url = getIntent().getStringExtra(EXTRA_URL);
-            getWebViewBridge().loadUrl(url);
-        }
+        configureSettings();
+        configureClients();
+        loadViews();
+        loadUrl(savedInstanceState);
     }
     
-    protected void setClients() {
-		mWebViewBridge.setWebChromeClient(new TriainaWebChromeClient(this));
-		mWebViewBridge.setWebViewClient(new TriainaWebViewClient());
-	}
+    protected void configureSettings() {
+        mConfigurator.configureSetting(mWebViewBridge);
+    }
 
+    protected void configureClients() {
+        mWebViewBridge.setWebChromeClient(new TriainaWebChromeClient(this));
+        mWebViewBridge.setWebViewClient(new TriainaWebViewClient());
+    }
+
+    protected void loadViews() {
+    }
+
+    protected void loadUrl(Bundle savedInstanceState) {
+        if (mRestoreManager.restoreWebView(mWebViewBridge, savedInstanceState))
+            return;
+        String url = getIntent().getStringExtra(EXTRA_URL);
+        getWebViewBridge().loadUrl(url);        
+    }
+    
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK) && getWebViewBridge().canGoBack()) {
@@ -115,7 +126,11 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
 
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mRestoreManager.storeWebView(mWebViewBridge, outState, getTaskId());
+        storeWebView(outState);
+    }
+    
+    protected void storeWebView(Bundle outState) {
+        mRestoreManager.storeWebView(mWebViewBridge, outState, getTaskId());        
     }
 
     @Override
