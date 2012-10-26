@@ -29,4 +29,8 @@ public final class TriainaInjectorUtils {
         TriainaInjector injector = ((TriainaApplication) context.getApplicationContext()).getInjector(context);
         injector.injectMembers(obj);
     }
+    
+    public static void destroyInjector(Context context) {
+        ((TriainaApplication) context.getApplicationContext()).destroyInjector(context);
+    }
 }
