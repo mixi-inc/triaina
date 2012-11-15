@@ -134,11 +134,8 @@ public class WebViewBridge extends WebView {
     }
 
     public String returnToWeb(String id, String dest, Result result) {
-        if (isDestroyed || TextUtils.isEmpty(id)) {
-            Log.d("TEST", "isDestroyed = " + isDestroyed);
-            Log.d("TEST", "id = " + id);
+        if (isDestroyed || TextUtils.isEmpty(id))
             return null;
-        }
         return notifyToWebInternal(id, dest, "result", result);
     }
 
