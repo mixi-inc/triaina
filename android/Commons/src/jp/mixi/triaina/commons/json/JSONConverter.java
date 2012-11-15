@@ -563,7 +563,7 @@ public final class JSONConverter {
 		Field[] fields = clazz.getDeclaredFields();
 		
 		for (Field field : fields) {
-			if ((! field.isAnnotationPresent(Exclude.class)) && (! field.isSynthetic())) {  //ignore Exclude annotated fields and synthetic fields
+			if (!Modifier.isStatic(field.getModifiers()) && !field.isAnnotationPresent(Exclude.class) && !field.isSynthetic()) {  //ignore Exclude annotated fields and synthetic fields
 				field.setAccessible(true);
 				String name = NamingConventionUtils.fromJavaFieldNameToJSONName(field.getName());
 				propMap.put(field, name);
