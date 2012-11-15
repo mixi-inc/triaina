@@ -147,8 +147,8 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mWebViewBridge.destroy();
+        super.onDestroy();
     }
 
     public static void startActivityForResult(Activity activity, Class<?> clazz, String url) {
