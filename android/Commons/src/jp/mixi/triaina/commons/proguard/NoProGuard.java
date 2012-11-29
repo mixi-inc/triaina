@@ -1,10 +1,10 @@
 package jp.mixi.triaina.commons.proguard;
 
 /**
- * Keep class from Proguard
- * You need following config in proguard.cfg
+ * Keep a class from being processed by Proguard.
+ * You will need the configuration in your proguard-project.txt.
  * 
- * -keep class * implements jp.mixi.android.commons.proguard.KeepClass {
+ * -keep class * implements jp.mixi.triaina.commons.proguard.KeepClass {
  *   *;
  *  }
  *  

@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 public final class NamingConventionUtils {
-	private static final String TAG = "NamingConventionUtils";
+	private static final String TAG = NamingConventionUtils.class.getCanonicalName();
 	
 	private NamingConventionUtils() {}
 	

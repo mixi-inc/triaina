@@ -6,7 +6,7 @@ import java.io.IOException;
 import android.util.Log;
 
 public final class CloseableUtils {
-    private static final String TAG = "jp.mixi.android.util.CloseableUtils";
+    private static final String TAG = CloseableUtils.class.getCanonicalName();
 
     private CloseableUtils() {}
 
