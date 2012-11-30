@@ -9,7 +9,7 @@ import jp.mixi.triaina.commons.exception.IllegalAccessRuntimeException;
 import jp.mixi.triaina.commons.exception.IllegalArgumentRuntimeException;
 
 public final class FieldUtils {
-    private static final String TAG = "FieldUtils";
+    private static final String TAG = FieldUtils.class.getCanonicalName();
 
     private FieldUtils() {
     }

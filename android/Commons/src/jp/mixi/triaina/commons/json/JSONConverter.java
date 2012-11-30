@@ -40,7 +40,7 @@ import android.util.Log;
  *
  */
 public final class JSONConverter {
-	private static final String TAG = "JSONConverter";
+	private static final String TAG = JSONConverter.class.getCanonicalName();
 	
 	private JSONConverter() {}
 	

@@ -10,7 +10,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 public class NetworkWorkerService extends WorkerService {
-	private static final String TAG = "NetworkWorkerService";
+	private static final String TAG = NetworkWorkerService.class.getCanonicalName();
 		
 	private boolean mIsConnected;
 	

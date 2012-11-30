@@ -16,13 +16,13 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 public class WorkerService extends AbstractIntentService {
-	private static final String TAG = "WorkerService";
+	private static final String TAG = WorkerService.class.getCanonicalName();
 	
 	public static final String EXTRA_JOB = "job";
 	public static final String EXTRA_RECEIVER = "receiver";
 	
 	public static final String EXTRA_CONFIRMED = "confirmed";
-	public static final String ACTION_CANCEL_TASK = "jp.mixi.android.commons.workerservice.WorkerService.cancelTask";
+	public static final String ACTION_CANCEL_TASK = "jp.mixi.triaina.commons.workerservice.WorkerService.cancelTask";
     
 	private AtomicReference<Worker<?>> mCurrentWorker = new AtomicReference<Worker<?>>();
 	
