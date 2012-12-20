@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <jp.mixi.triaina.webview.WebViewBridge android:id="@+id/webview"
+    <triaina.webview.WebViewBridge android:id="@+id/webview"
     android:layout_height="wrap_content"
     android:layout_width="fill_parent"/>
 </LinearLayout>

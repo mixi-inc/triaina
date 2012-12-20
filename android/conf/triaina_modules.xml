@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="triaina_modules">
-        <item>jp.mixi.triaina.webview.WebViewBridgeModule</item>
+        <item>triaina.webview.WebViewBridgeModule</item>
     </string-array>
 </resources>
     
