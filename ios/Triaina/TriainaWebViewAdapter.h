@@ -8,28 +8,47 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TriainaWebViewAdapter : NSObject <UIWebViewDelegate> {
-    id webViewDelegate;
-    id webBridgeDelegate;
-    UIWebView *webView;
-}
+typedef enum {
+    TriainaLogTypeNone,
+    TriainaLogTypeError,
+    TriainaLogTypeWarn,
+    TriainaLogTypeInfo
+} TriainaLogType;
 
-@property (assign, nonatomic) BOOL triainaEnabled; 
-@property (assign, nonatomic) IBOutlet id webViewDelegate;
-@property (assign, nonatomic) IBOutlet id webBridgeDelegate;
-@property (assign, nonatomic) IBOutlet UIWebView *webView;
+@class TriainaWebBridgeModel;
+@protocol TriainaWebBridgeDelegate;
+
+@interface TriainaWebViewAdapter : NSObject <UIWebViewDelegate>
+
+@property (nonatomic, assign) BOOL triainaEnabled;
+@property (nonatomic, readonly) BOOL triainaInitialized;
+@property (nonatomic, retain) NSString *triainaAllowedDomain;
+@property (nonatomic, assign) BOOL consoleEnabled;
+@property (nonatomic, readonly) BOOL consoleInitialized;
+@property (nonatomic, assign) TriainaLogType logFilter;
+
+@property (nonatomic, retain) IBOutlet TriainaWebBridgeModel *model;
+@property (nonatomic, assign) IBOutlet UIWebView *webView;
+@property (nonatomic, assign) IBOutlet id<UIWebViewDelegate> webViewDelegate;
+@property (nonatomic, assign) IBOutlet id<TriainaWebBridgeDelegate> webBridgeDelegate;
 
 - (id)initWithWebView:(UIWebView *)webView;
+- (id)initWithWebView:(UIWebView *)webView model:(TriainaWebBridgeModel *)model;
 
-- (SEL)deviceHandlerForChannel:(NSString *)channel isRequest:(BOOL)isRequest;
-- (SEL)deviceResponderForChannel:(NSString *)channel;
-- (void)receivedDeviceNotification:(NSDictionary*)notify;
-- (NSString *)sendWebNotificationWithChannel:(NSString*)channel params:(NSDictionary *)params;
-- (void)respondWithResult:(NSDictionary *)result bridgeId:(NSString *)bridgeId;
+- (NSString *)sendMessageToDeviceWithDest:(NSString*)channel params:(NSDictionary *)params;
+- (NSString *)sendMessageToWebWithDest:(NSString*)channel params:(NSDictionary *)params;
+- (void)respondToWebWithBridgeID:(NSString *)bridgeID result:(NSDictionary *)result;
+- (void)respondErrorToWebWithBridgeID:(NSString *)bridgeID code:(NSString *)code message:(NSString*)message;
 
-// default handler/sender
-- (void)handleSystemWebStatusRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
-- (void)handleErrorWithCode:(NSString *)code message:(NSString *)message;
-- (void)sendErrorWithCode:(NSString *)code message:(NSString*)message bridgeId:(NSString *)bridgeId;
+- (void)log:(NSString *)msg;
+- (void)log:(NSString *)msg type:(TriainaLogType)type;
+
+@end
+
+@protocol TriainaWebBridgeDelegate <NSObject>
+
+@optional
+- (void)webBridge:(TriainaWebBridgeModel *)model didStartAsyncConnectionWithBridgeId:(NSString *)bridgeId;
+- (void)webBridge:(TriainaWebBridgeModel *)model didEndAsyncConnectionWithBridgeId:(NSString *)bridgeId;
 
 @end

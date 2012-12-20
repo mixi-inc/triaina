@@ -11,5 +11,6 @@
 @interface TriainaConfig : NSObject
 
 + (NSString *)version;
++ (NSString *)urlScheme;
 
 @end

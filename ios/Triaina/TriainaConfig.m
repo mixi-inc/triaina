@@ -8,10 +8,16 @@
 
 #import "TriainaConfig.h"
 
+static NSString * const kTriainaBridgeURLScheme = @"triaina-bridge";
+
 @implementation TriainaConfig
 
 + (NSString *)version {
     return @"1.1";
+}
+
++ (NSString *)urlScheme {
+    return kTriainaBridgeURLScheme;
 }
 
 @end

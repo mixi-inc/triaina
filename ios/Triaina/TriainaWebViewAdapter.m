@@ -7,160 +7,216 @@
 //
 
 #import "TriainaWebViewAdapter.h"
+#import "TriainaWebBridgeModel.h"
 #import "TriainaConfig.h"
 #import "SBJson.h"
-
-#define kTriainaBridgeURLScheme @"triaina-bridge"
+#import "NSString+Util.h"
 
 @interface TriainaWebViewAdapter()
 
-@property (nonatomic,retain) NSString *sessionKey;
+@property (nonatomic, retain) NSString *sessionKey;
+
+- (void)receivedMessage:(NSDictionary*)message;
 
 @end
 
 @implementation TriainaWebViewAdapter
 
-@synthesize triainaEnabled;
-@synthesize webViewDelegate, webBridgeDelegate;
-@synthesize webView;
-@synthesize sessionKey;
+- (id)init {
+    return [self initWithWebView:nil];
+}
 
 - (id)initWithWebView:(UIWebView *)aWebView {
+    TriainaWebBridgeModel *aModel = [[[TriainaWebBridgeModel alloc] init] autorelease];
+    return [self initWithWebView:aWebView model:aModel];
+}
+
+- (id)initWithWebView:(UIWebView *)aWebView model:(TriainaWebBridgeModel *)aModel {
     self = [super init];
     if(self) {
+        self.model = aModel;
+        aModel.adapter = self;
         self.webView = aWebView;
-        self.sessionKey = [NSString stringWithFormat:@"%x", rand()];
+        self.logFilter = TriainaLogTypeWarn;
     }
     return self;
 }
 
 - (void)dealloc {
+    self.model = nil;
+    self.webView = nil;
     self.webViewDelegate = nil;
     self.webBridgeDelegate = nil;
-    self.webView.delegate = nil;
-    self.webView = nil;
     self.sessionKey = nil;
     [super dealloc];
 }
 
+#pragma mark - properties
+
+- (id)webViewDelegate
+{
+    return _model.delegate;
+}
+
+- (void)setWebBridgeDelegate:(id)webBridgeDeleagte
+{
+    _model.delegate = webBridgeDeleagte;
+}
+
+#pragma mark - Initializer Methods
+
+- (void)initializeTriaina {
+    if(self.triainaInitialized)
+        return;
+    
+    self.sessionKey = [NSString stringWithFormat:@"%x", rand()];
+    NSString *script = [NSString stringWithFormat:
+                        @"window.DeviceBridge = {};"
+                        @"window.DeviceBridge.notifyToDevice = function(msg) {"
+                        @"  document.location = ('%@://notify-device/%@/' + msg);"
+                        @"};",
+                        [TriainaConfig urlScheme], _sessionKey];
+    
+    [_webView stringByEvaluatingJavaScriptFromString:script];
+    
+    [self sendMessageToWebWithDest:@"system.device.status"
+                         params:[NSDictionary dictionaryWithObject:@"opened" forKey:@"status"]];
+}
+
+- (BOOL)triainaInitialized {
+    return [[_webView stringByEvaluatingJavaScriptFromString:@"window.DeviceBridge != undefined"] isEqualToString:@"true"];
+}
+
+- (BOOL)triainaAllowed {
+    return !(_triainaAllowedDomain && ![self.webView.request.mainDocumentURL.host hasPrefix:_triainaAllowedDomain]);
+}
+
+- (void)initializeConsole {
+    if(self.consoleInitialized)
+        return;
+    
+    NSString *script = [NSString stringWithFormat:
+                        @"window.console = {};"
+                        @"window.console.log = function(str) {"
+                        @"  document.location = ('%@://log/' + escape(str));"
+                        @"};"
+                        @"window.console.triaina_flag = 1",
+                        [TriainaConfig urlScheme]];
+    
+    [_webView stringByEvaluatingJavaScriptFromString:script];
+}
+
+- (BOOL)consoleInitialized {
+    return [[_webView stringByEvaluatingJavaScriptFromString:@"window.console.triaina_flag != undefined"] isEqualToString:@"true"];
+}
+
+#pragma mark - Log Methods
+
+- (void)log:(NSString *)msg {
+    [self log:msg type:TriainaLogTypeInfo];
+}
+
+- (void)log:(NSString *)msg type:(TriainaLogType)type {
+    if(_logFilter < type)
+        return;
+    
+    NSString *typeStr = (type == TriainaLogTypeInfo) ? @"info" :
+    (type == TriainaLogTypeWarn) ? @"warn" : @"error";
+    
+    NSLog(@"[Triaina-%p %@] %@", self, typeStr, msg);
+}
+
 #pragma mark - Bridge Methods
 
-- (SEL)deviceHandlerForChannel:(NSString *)channel isRequest:(BOOL)isRequest
-{
-    NSMutableString *selectorString = [NSMutableString stringWithString:@"handle"];
-    
-    NSArray *tokens = [channel componentsSeparatedByString:@"."];
-    for(NSString *token in tokens) {
-        [selectorString appendFormat:@"%@%@", [[token substringToIndex:1] capitalizedString], [token substringFromIndex:1]];
-    }
-    
-    if(isRequest) {
-        [selectorString appendString:@"RequestWithParams:bridgeId:"];
-    } else {
-        [selectorString appendString:@"ResponseWithResult:bridgeId:"];
-    }
-    
-    return NSSelectorFromString(selectorString);
-}
-
-- (SEL)deviceResponderForChannel:(NSString *)channel 
-{
-    NSMutableString *selectorString = [NSMutableString stringWithString:@"respondTo"];
-    
-    NSArray *tokens = [channel componentsSeparatedByString:@"."];
-    for(NSString *token in tokens) {
-        [selectorString appendFormat:@"%@%@", [[token substringToIndex:1] capitalizedString], [token substringFromIndex:1]];
-    }
-    [selectorString appendString:@"WithParams:bridgeId:"];
-    
-    return NSSelectorFromString(selectorString);
-}
-
-- (void)receivedDeviceNotification:(NSDictionary*)notify 
+- (void)receivedMessage:(NSDictionary*)message 
 {
     // TODO check version
     // NSString *version = [notify objectForKey:@"bridge"];
     
     // error notification
-    if([notify objectForKey:@"code"]) {
-        NSString *code = [notify objectForKey:@"code"];
-        NSString *message = [notify objectForKey:@"message"];
+    if([message objectForKey:@"code"]) {
+        NSString *code = [message objectForKey:@"code"];
+        NSString *emsg = [message objectForKey:@"message"];
         
-        if([webBridgeDelegate respondsToSelector:@selector(handleErrorWithCode:message:)]) {
-            [webBridgeDelegate performSelector:@selector(handleErrorWithCode:message:) withObject:code withObject:message];
-        } else {
-            [self handleErrorWithCode:code message:message];
-        }
+        [_model handleErrorWithCode:code message:emsg];
         return;
     }
     
-    NSLog(@"[Triaina] received: %@", notify);
+    [self log:[NSString stringWithFormat:@"received: %@", message]];
     
-    NSString *channel = [notify objectForKey:@"dest"];
-    NSString *bridgeId = [notify objectForKey:@"id"];
-    BOOL isRequest = ([notify objectForKey:@"params"] != nil);
-    NSDictionary *params = (isRequest) ? [notify objectForKey:@"params"] : [notify objectForKey:@"result"];
-        
-    SEL selector = [self deviceHandlerForChannel:channel isRequest:isRequest];
-    if([webBridgeDelegate respondsToSelector:selector]) {
-        [webBridgeDelegate performSelector:selector withObject:params withObject:bridgeId];
-    } else if([self respondsToSelector:selector]) {
-        [self performSelector:selector withObject:params withObject:bridgeId];
+    NSString *bridgeId = [message objectForKey:@"id"];
+    NSString *dest = [message objectForKey:@"dest"];
+    
+    if([message objectForKey:@"params"] != nil) {
+        NSDictionary *params = [message objectForKey:@"params"];
+        [_model receivedRequestWithBridgeId:bridgeId dest:dest params:params];
     } else {
-        NSLog(@"[Triaina] channel: %@ is unsupported", channel);
-        [self sendErrorWithCode:@"404" message:[NSString stringWithFormat:@"unsupported channel:%@", channel] bridgeId:bridgeId];
+        NSDictionary *result = [message objectForKey:@"result"];
+        [_model receivedResponseWithBridgeId:bridgeId dest:dest result:result];
     }
 }
 
-- (void)notifyToWeb:(NSDictionary*)notify 
-{
-    NSString *json = [notify JSONRepresentation];
-    NSString *call = [NSString stringWithFormat:@"WebBridge.notifyToWeb('%@');", 
-                      [json stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
-    [webView stringByEvaluatingJavaScriptFromString:call];
+- (NSString *)sendMessageToDeviceWithDest:(NSString*)channel params:(NSDictionary *)params {
+    static NSInteger count = 0;
     
-    NSLog(@"[Triaina] sent: %@", notify);
+    if(!params)
+        params = [NSDictionary dictionary];
+
+    NSString *bridgeId = [NSString stringWithFormat:@"device_to_device.%d", count++];
+    NSDictionary *message = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [TriainaConfig version], @"bridge",
+                             channel, @"dest",
+                             bridgeId, @"id",
+                             params, @"params", nil];
+    
+    [self receivedMessage:message];
+    
+    return bridgeId;
 }
 
-- (NSString *)sendWebNotificationWithChannel:(NSString*)channel params:(NSDictionary *)params 
+- (void)sendMessageToWeb:(NSDictionary*)message 
+{
+    NSString *json = [message JSONRepresentation];
+    NSString *call = [NSString stringWithFormat:@"WebBridge.notifyToWeb('%@');", 
+                      [json encodeURIComponent]];
+    [_webView stringByEvaluatingJavaScriptFromString:call];
+    
+    [self log:[NSString stringWithFormat:@"sent: %@", message]];
+}
+
+- (NSString *)sendMessageToWebWithDest:(NSString*)channel params:(NSDictionary *)params 
 {
     static NSInteger count = 0;
     
-    NSString *sendId = [NSString stringWithFormat:@"send.%d", count++];
+    if(!params)
+        params = [NSDictionary dictionary];
     
-    NSDictionary *notify = [NSDictionary dictionaryWithObjectsAndKeys:
+    NSString *sendId = [NSString stringWithFormat:@"device_to_web.%d", count++];
+    NSDictionary *message = [NSDictionary dictionaryWithObjectsAndKeys:
                             [TriainaConfig version], @"bridge",
                             channel, @"dest", 
                             sendId, @"id",
                             params, @"params", nil];
     
-    [self notifyToWeb:notify];
+    [self sendMessageToWeb:message];
+    
     return sendId;
 }
 
-- (void)respondWithResult:(NSDictionary *)result bridgeId:(NSString *)bridgeId 
+- (void)respondToWebWithBridgeID:(NSString *)bridgeId result:(NSDictionary *)result
 {
+    if(!result)
+        result = [NSDictionary dictionary];
+    
     NSDictionary *notify = [NSDictionary dictionaryWithObjectsAndKeys:
                             [TriainaConfig version], @"bridge",
                             bridgeId, @"id",
                             result, @"result", nil];
     
-    [self notifyToWeb:notify];
+    [self sendMessageToWeb:notify];
 }
 
-#pragma mark - Default Handlers
-
-- (void)handleSystemWebStatusRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId
-{
-    [self respondWithResult:[NSDictionary dictionary] 
-                   bridgeId:bridgeId];
-}
-
-- (void)handleErrorWithCode:(NSString *)code message:(NSString *)message {
-    NSLog(@"[Triaina] received error(%@): %@", code, message);
-}
-
-- (void)sendErrorWithCode:(NSString *)code message:(NSString*)message bridgeId:(NSString *)bridgeId
+- (void)respondErrorToWebWithBridgeID:(NSString *)bridgeId code:(NSString *)code message:(NSString *)message
 {
     NSDictionary *notify = [NSDictionary dictionaryWithObjectsAndKeys:
                             [TriainaConfig version], @"bridge",
@@ -168,67 +224,86 @@
                             [NSDictionary dictionaryWithObjectsAndKeys:
                              code, @"code",
                              message, @"message",
-                             nil], @"error", 
+                             nil], @"error",
                             nil];
     
-    [self notifyToWeb:notify];
+    [self sendMessageToWeb:notify];
 }
 
 #pragma mark - UIWebViewDelegate
 
 - (BOOL)webView:(UIWebView *)aWebView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if(triainaEnabled && [request.URL.scheme isEqualToString:kTriainaBridgeURLScheme]) {
-        NSString *path = request.URL.path;
-        NSString *key = [path substringWithRange:NSMakeRange(1, sessionKey.length)];
-        NSString *json = [path substringFromIndex:(1 + sessionKey.length + 1)];
-        
-        if(![key isEqualToString:sessionKey]) {
-            NSLog(@"[Triaina] invalid session-key: %@", key);
+    if(_triainaEnabled && [request.URL.scheme isEqualToString:[TriainaConfig urlScheme]]) {
+        if(![self triainaAllowed]) {
+            [self log:[NSString stringWithFormat:@"Ignored triaina-request in domain: %@", self.webView.request.mainDocumentURL.host]
+                 type:TriainaLogTypeWarn];
             return NO;
         }
-        
-        NSDictionary *notify = [json JSONValue];
-        if(notify) {
-            [self receivedDeviceNotification:notify];
-        } else {
-            NSLog(@"[Triaina] broken json: %@", json);
+
+        if(!self.triainaInitialized)
+            [self initializeTriaina];
+
+        // Deviceのメッセージ受信
+        if([request.URL.host isEqualToString:@"notify-device"]) {
+            NSString *path = request.URL.path;
+            NSString *key = [path substringWithRange:NSMakeRange(1, _sessionKey.length)];
+            NSString *json = [path substringFromIndex:(1 + _sessionKey.length + 1)];
+            
+            if(![key isEqualToString:_sessionKey]) {
+                [self log:[NSString stringWithFormat:@"invalid session-key: %@", key] type:TriainaLogTypeError];
+                return NO;
+            }
+            
+            NSDictionary *notify = [json JSONValue];
+            if(notify) {
+                [self receivedMessage:notify];
+            } else {
+                [self log:[NSString stringWithFormat:@"broken json: %@", json] type:TriainaLogTypeError];
+            }
+            
+            return NO;
         }
-        return NO;
+        // ログ表示
+        else if([request.URL.host isEqualToString:@"log"]) {
+            NSString *msg = [request.URL.path substringFromIndex:1];
+            [self log:msg];
+            
+            return NO;
+        }
     }
     
-    if([webViewDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)])
-        return [webViewDelegate webView:aWebView shouldStartLoadWithRequest:request navigationType:navigationType];
-    else
+    if([_webViewDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+        return [_webViewDelegate webView:aWebView shouldStartLoadWithRequest:request navigationType:navigationType];
+    } else {
         return YES;
+    }
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)aWebView 
+- (void)webViewDidStartLoad:(UIWebView *)aWebView
 {
-    if([webViewDelegate respondsToSelector:@selector(webViewDidStartLoad:)])
-        [webViewDelegate webViewDidStartLoad:aWebView];
+    if([_webViewDelegate respondsToSelector:@selector(webViewDidStartLoad:)])
+        [_webViewDelegate webViewDidStartLoad:aWebView];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView 
 {
-    if(triainaEnabled
-       && [[aWebView stringByEvaluatingJavaScriptFromString:@"WebBridge != undefined"] isEqualToString:@"true"]
-       && ![[aWebView stringByEvaluatingJavaScriptFromString:@"DeviceBridge != undefined"] isEqualToString:@"true"]) {
-        [aWebView stringByEvaluatingJavaScriptFromString:@"window.DeviceBridge = {};"];
-        [aWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.DeviceBridge.notifyToDevice = function(str){ document.location = ('%@://notify-device/%@/' + str); };", kTriainaBridgeURLScheme, sessionKey]];
-        
-        [self sendWebNotificationWithChannel:@"system.device.status" 
-                                      params:[NSDictionary dictionaryWithObject:@"opened" forKey:@"status"]];
+    if([self triainaAllowed]) {
+        if(self.consoleEnabled && !self.consoleInitialized)
+            [self initializeConsole];
+
+        if(_triainaEnabled && !self.triainaInitialized)
+            [self initializeTriaina];
     }
     
-    if([webViewDelegate respondsToSelector:@selector(webViewDidFinishLoad:)])
-        [webViewDelegate webViewDidFinishLoad:aWebView];
+    if([_webViewDelegate respondsToSelector:@selector(webViewDidFinishLoad:)])
+        [_webViewDelegate webViewDidFinishLoad:aWebView];
 }
 
 - (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error
 {
-    if([webViewDelegate respondsToSelector:@selector(webView:didFailLoadWithError:)])
-        [webViewDelegate webView:aWebView didFailLoadWithError:error];
+    if([_webViewDelegate respondsToSelector:@selector(webView:didFailLoadWithError:)])
+        [_webViewDelegate webView:aWebView didFailLoadWithError:error];
 }
 
 

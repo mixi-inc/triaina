@@ -14,4 +14,6 @@
 @property (nonatomic, retain) TriainaWebViewAdapter *adapter;
 @property (nonatomic, assign) IBOutlet id webBridgeDelegate;
 
+- (void)prepareAdapter; // override if model-class is overridden.
+
 @end

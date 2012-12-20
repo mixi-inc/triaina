@@ -16,8 +16,6 @@
 
 @implementation TriainaSampleViewController
 
-@synthesize triainaWebViewController;
-@synthesize webViewPlaceholder;
 @synthesize webView;
 @synthesize urlField;
 @synthesize triainaButton;
@@ -26,12 +24,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.webView = (TriainaWebView *)triainaWebViewController.view;
-    webView.delegate = (id)self;
-    
-    webView.frame = webViewPlaceholder.bounds;
-    [webViewPlaceholder addSubview:webView];
+
+    webView.delegate = self;
+    webView.webBridgeDelegate = self;
+    webView.adapter.logFilter = TriainaLogTypeInfo;
     
     [self updateButtons];
 }
@@ -43,19 +39,8 @@
     self.webView = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
-}
-
 - (void)dealloc
 {
-    self.triainaWebViewController = nil;
-    self.webViewPlaceholder = nil;
     self.webView = nil;
     self.urlField = nil;
     self.triainaButton = nil;

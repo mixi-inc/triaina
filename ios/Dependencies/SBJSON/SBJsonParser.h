@@ -42,8 +42,7 @@
 
 @private
 	NSString *error;
-//    NSUInteger depth;
-    NSUInteger maxDepth;
+    NSUInteger depth, maxDepth;
 
 }
 

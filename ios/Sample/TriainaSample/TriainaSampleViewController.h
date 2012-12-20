@@ -7,13 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TriainaWebViewController.h"
+#import "TriainaWebView.h"
 
-@interface TriainaSampleViewController : UIViewController
+@interface TriainaSampleViewController : UIViewController <UIWebViewDelegate, TriainaWebBridgeDelegate>
 
-@property (nonatomic, retain) IBOutlet TriainaWebViewController *triainaWebViewController;
-@property (nonatomic, retain) IBOutlet UIView *webViewPlaceholder;
-@property (nonatomic, retain) TriainaWebView *webView;
+@property (nonatomic, retain) IBOutlet TriainaWebView *webView;
 @property (nonatomic, retain) IBOutlet UITextField *urlField;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *triainaButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *backButton, *forwardButton, *refreshButton, *stopButton;

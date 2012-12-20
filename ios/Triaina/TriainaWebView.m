@@ -7,16 +7,20 @@
 //
 
 #import "TriainaWebView.h"
+#import "TriainaWebBridgeModel.h"
 
 @implementation TriainaWebView
 
-@synthesize adapter;
 @dynamic webBridgeDelegate;
+
+- (void)prepareAdapter {
+    self.adapter = [[[TriainaWebViewAdapter alloc] initWithWebView:self] autorelease];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.adapter = [[[TriainaWebViewAdapter alloc] initWithWebView:self] autorelease];
+        [self prepareAdapter];
     }
     return self;
 }
@@ -24,39 +28,37 @@
 - (id)initWithCoder:(NSCoder *)coder 
 {
     if (self = [super initWithCoder:coder]) {
-        self.adapter = [[[TriainaWebViewAdapter alloc] initWithWebView:self] autorelease];
+        [self prepareAdapter];
     }
     return self;
+}
+
+- (void)dealloc {
+    self.adapter = nil;
+    [super dealloc];
 }
 
 // override delegate getter
 - (id)delegate 
 {
-    return adapter.webViewDelegate;
+    return _adapter.webViewDelegate;
 }
 
 // override delegate setter
 - (void)setDelegate:(id<UIWebViewDelegate>)delegate 
 {
-    adapter.webViewDelegate = delegate;
-    [super setDelegate:adapter];
+    _adapter.webViewDelegate = delegate;
+    [super setDelegate:_adapter];
 }
 
-- (id)webViewDelegate 
+- (id)webBridgeDelegate
 {
-    return adapter.webBridgeDelegate;
+    return _adapter.webBridgeDelegate;
 }
 
 - (void)setWebBridgeDelegate:(id)webBridgeDeleagte
 {
-    adapter.webBridgeDelegate = webBridgeDeleagte;
-}
-
-
-- (void)dealloc {
-    self.delegate = nil;
-    self.adapter = nil;
-    [super dealloc];
+    _adapter.webBridgeDelegate = webBridgeDeleagte;
 }
 
 @end

@@ -18,8 +18,6 @@
 		147D0BED15B7B79900453045 /* TriainaConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0BE815B7B79900453045 /* TriainaConfig.m */; };
 		147D0BEE15B7B79900453045 /* TriainaWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0BEA15B7B79900453045 /* TriainaWebView.m */; };
 		147D0BEF15B7B79900453045 /* TriainaWebViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0BEC15B7B79900453045 /* TriainaWebViewAdapter.m */; };
-		147D0BFE15B7B9C200453045 /* TriainaWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0BFC15B7B9C100453045 /* TriainaWebViewController.m */; };
-		147D0BFF15B7B9C200453045 /* TriainaWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 147D0BFD15B7B9C100453045 /* TriainaWebViewController.xib */; };
 		147D0C2015B7CEC700453045 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0C0815B7CEC700453045 /* NSObject+SBJson.m */; };
 		147D0C2115B7CEC700453045 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0C0B15B7CEC700453045 /* SBJsonParser.m */; };
 		147D0C2215B7CEC700453045 /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0C0D15B7CEC700453045 /* SBJsonStreamParser.m */; };
@@ -32,6 +30,9 @@
 		147D0C2915B7CEC700453045 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0C1B15B7CEC700453045 /* SBJsonTokeniser.m */; };
 		147D0C2A15B7CEC700453045 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0C1D15B7CEC700453045 /* SBJsonUTF8Stream.m */; };
 		147D0C2B15B7CEC700453045 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 147D0C1F15B7CEC700453045 /* SBJsonWriter.m */; };
+		147F4CE11682FA1600C4D621 /* TriainaWebBridgeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 147F4CDE1682FA1600C4D621 /* TriainaWebBridgeModel.m */; };
+		147F4CE21682FA1600C4D621 /* TriainaWebBridgeModel+StandardAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 147F4CE01682FA1600C4D621 /* TriainaWebBridgeModel+StandardAPI.m */; };
+		147F4CE61682FCAD00C4D621 /* NSString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 147F4CE51682FCAD00C4D621 /* NSString+Util.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,9 +55,6 @@
 		147D0BEA15B7B79900453045 /* TriainaWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriainaWebView.m; sourceTree = "<group>"; };
 		147D0BEB15B7B79900453045 /* TriainaWebViewAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriainaWebViewAdapter.h; sourceTree = "<group>"; };
 		147D0BEC15B7B79900453045 /* TriainaWebViewAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriainaWebViewAdapter.m; sourceTree = "<group>"; };
-		147D0BFB15B7B9C100453045 /* TriainaWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriainaWebViewController.h; sourceTree = "<group>"; };
-		147D0BFC15B7B9C100453045 /* TriainaWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriainaWebViewController.m; sourceTree = "<group>"; };
-		147D0BFD15B7B9C100453045 /* TriainaWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TriainaWebViewController.xib; sourceTree = "<group>"; };
 		147D0C0715B7CEC700453045 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
 		147D0C0815B7CEC700453045 /* NSObject+SBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJson.m"; sourceTree = "<group>"; };
 		147D0C0915B7CEC700453045 /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
@@ -82,6 +80,12 @@
 		147D0C1D15B7CEC700453045 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		147D0C1E15B7CEC700453045 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		147D0C1F15B7CEC700453045 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		147F4CDD1682FA1600C4D621 /* TriainaWebBridgeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriainaWebBridgeModel.h; sourceTree = "<group>"; };
+		147F4CDE1682FA1600C4D621 /* TriainaWebBridgeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriainaWebBridgeModel.m; sourceTree = "<group>"; };
+		147F4CDF1682FA1600C4D621 /* TriainaWebBridgeModel+StandardAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TriainaWebBridgeModel+StandardAPI.h"; sourceTree = "<group>"; };
+		147F4CE01682FA1600C4D621 /* TriainaWebBridgeModel+StandardAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TriainaWebBridgeModel+StandardAPI.m"; sourceTree = "<group>"; };
+		147F4CE41682FCAD00C4D621 /* NSString+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Util.h"; path = "../Dependencies/NSString+Util.h"; sourceTree = "<group>"; };
+		147F4CE51682FCAD00C4D621 /* NSString+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Util.m"; path = "../Dependencies/NSString+Util.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +157,8 @@
 		147D0BE415B7B76500453045 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				147F4CE41682FCAD00C4D621 /* NSString+Util.h */,
+				147F4CE51682FCAD00C4D621 /* NSString+Util.m */,
 				147D0BE615B7B79900453045 /* Triaina */,
 				147D0C0615B7CEC700453045 /* SBJSON */,
 			);
@@ -168,9 +174,10 @@
 				147D0BEA15B7B79900453045 /* TriainaWebView.m */,
 				147D0BEB15B7B79900453045 /* TriainaWebViewAdapter.h */,
 				147D0BEC15B7B79900453045 /* TriainaWebViewAdapter.m */,
-				147D0BFB15B7B9C100453045 /* TriainaWebViewController.h */,
-				147D0BFC15B7B9C100453045 /* TriainaWebViewController.m */,
-				147D0BFD15B7B9C100453045 /* TriainaWebViewController.xib */,
+				147F4CDD1682FA1600C4D621 /* TriainaWebBridgeModel.h */,
+				147F4CDE1682FA1600C4D621 /* TriainaWebBridgeModel.m */,
+				147F4CDF1682FA1600C4D621 /* TriainaWebBridgeModel+StandardAPI.h */,
+				147F4CE01682FA1600C4D621 /* TriainaWebBridgeModel+StandardAPI.m */,
 			);
 			name = Triaina;
 			path = ../Triaina;
@@ -262,7 +269,6 @@
 			files = (
 				147D0BCB15B7B74C00453045 /* InfoPlist.strings in Resources */,
 				147D0BD715B7B74C00453045 /* TriainaSampleViewController.xib in Resources */,
-				147D0BFF15B7B9C200453045 /* TriainaWebViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,7 +285,6 @@
 				147D0BED15B7B79900453045 /* TriainaConfig.m in Sources */,
 				147D0BEE15B7B79900453045 /* TriainaWebView.m in Sources */,
 				147D0BEF15B7B79900453045 /* TriainaWebViewAdapter.m in Sources */,
-				147D0BFE15B7B9C200453045 /* TriainaWebViewController.m in Sources */,
 				147D0C2015B7CEC700453045 /* NSObject+SBJson.m in Sources */,
 				147D0C2115B7CEC700453045 /* SBJsonParser.m in Sources */,
 				147D0C2215B7CEC700453045 /* SBJsonStreamParser.m in Sources */,
@@ -292,6 +297,9 @@
 				147D0C2915B7CEC700453045 /* SBJsonTokeniser.m in Sources */,
 				147D0C2A15B7CEC700453045 /* SBJsonUTF8Stream.m in Sources */,
 				147D0C2B15B7CEC700453045 /* SBJsonWriter.m in Sources */,
+				147F4CE11682FA1600C4D621 /* TriainaWebBridgeModel.m in Sources */,
+				147F4CE21682FA1600C4D621 /* TriainaWebBridgeModel+StandardAPI.m in Sources */,
+				147F4CE61682FCAD00C4D621 /* NSString+Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +377,7 @@
 				GCC_PREFIX_HEADER = "TriainaSample/TriainaSample-Prefix.pch";
 				INFOPLIST_FILE = "TriainaSample/TriainaSample-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -380,6 +389,7 @@
 				GCC_PREFIX_HEADER = "TriainaSample/TriainaSample-Prefix.pch";
 				INFOPLIST_FILE = "TriainaSample/TriainaSample-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
