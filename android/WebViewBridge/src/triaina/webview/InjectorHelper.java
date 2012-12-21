@@ -1,12 +1,12 @@
 package triaina.webview;
 
-import triaina.injector.TriainaApplication;
+import triaina.injector.TriainaInjectorFactory;
 
 import android.content.Context;
 
 public class InjectorHelper {
     public <T> T inject(Context context, T obj) {
-        ((TriainaApplication)context.getApplicationContext()).getInjector(context).injectMembers(obj);
+        TriainaInjectorFactory.getInjector(context).injectMembers(obj);
         return obj;
     }
 }

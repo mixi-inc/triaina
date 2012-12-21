@@ -2,8 +2,8 @@ package triaina.injector.activity;
 
 import com.google.inject.Inject;
 
-import triaina.injector.TriainaApplication;
 import triaina.injector.TriainaInjector;
+import triaina.injector.TriainaInjectorFactory;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -29,7 +29,7 @@ public class TriainaActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	TriainaInjector injector = ((TriainaApplication)getApplication()).getInjector(this);
+    	TriainaInjector injector = TriainaInjectorFactory.getInjector(this);
     	mEventManager = injector.getInstance(EventManager.class);
     	injector.injectMembersWithoutViews(this);
     	super.onCreate(savedInstanceState);
@@ -81,7 +81,7 @@ public class TriainaActivity extends Activity {
             mEventManager.fire(new OnDestroyEvent());
         } finally {
             try {
-            	((TriainaApplication)getApplication()).destroyInjector(this);
+            	TriainaInjectorFactory.destroyInjector(this);
             } finally {
                 super.onDestroy();
             }
@@ -98,7 +98,7 @@ public class TriainaActivity extends Activity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        ((TriainaApplication)getApplication()).getInjector(this).injectMembers(this);
+        TriainaInjectorFactory.getInjector(this).injectMembers(this);
         mEventManager.fire(new OnContentChangedEvent());
     }
 

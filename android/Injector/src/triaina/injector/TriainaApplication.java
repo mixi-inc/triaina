@@ -3,7 +3,6 @@ package triaina.injector;
 import com.google.inject.Stage;
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
 public class TriainaApplication extends Application {
@@ -17,13 +16,5 @@ public class TriainaApplication extends Application {
 		} catch (Exception exp) {
 			Log.e(TAG, exp.getMessage() + "", exp);
 		}
-	}
-	
-	public TriainaInjector getInjector(Context context) {
-		return TriainaInjectorFactory.getInjector(context);
-	}
-	
-	public void destroyInjector(Context context) {
-		TriainaInjectorFactory.destroyInjector(context);
 	}
 }
