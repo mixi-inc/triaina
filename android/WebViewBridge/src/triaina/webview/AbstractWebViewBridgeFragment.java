@@ -2,6 +2,7 @@ package triaina.webview;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import triaina.webview.entity.device.NetBrowserOpenParams;
 import triaina.webview.entity.device.ToastParams;
 
 public abstract class AbstractWebViewBridgeFragment extends AbstractTriainaFragment {
+    private static final String TAG = AbstractWebViewBridgeFragment.class.getSimpleName();
+
     private WebViewBridge mWebViewBridge;
 
     @Inject
@@ -132,7 +135,11 @@ public abstract class AbstractWebViewBridgeFragment extends AbstractTriainaFragm
 
     @Override
     public void onDestroyView() {
-        mWebViewBridge.destroy();
+        try {
+            mWebViewBridge.destroy();
+        } catch (Exception exp) {
+            Log.w(TAG, exp.getMessage() + "", exp);
+        }
         super.onDestroyView();
     }
 

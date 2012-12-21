@@ -18,10 +18,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
 public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
+    private static final String TAG = AbstractWebViewBridgeActivity.class.getSimpleName();
+
     public static final String EXTRA_URL = "_url";
 
     private WebViewBridge mWebViewBridge;
@@ -147,7 +150,11 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
 
     @Override
     protected void onDestroy() {
-        mWebViewBridge.destroy();
+        try {
+            mWebViewBridge.destroy();
+        } catch (Exception exp) {
+            Log.w(TAG, exp.getMessage() + "", exp);
+        }
         super.onDestroy();
     }
 
