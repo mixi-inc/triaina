@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 
 import triaina.commons.utils.SystemUtils;
 import triaina.injector.TriainaEnvironment;
-import triaina.injector.fragment.AbstractTriainaFragment;
+import triaina.injector.fragment.TriainaFragment;
 import triaina.webview.annotation.Bridge;
 import triaina.webview.config.WebViewBridgeConfigurator;
 import triaina.webview.entity.Params;
@@ -22,7 +22,7 @@ import triaina.webview.entity.device.FormPictureSelectResult;
 import triaina.webview.entity.device.NetBrowserOpenParams;
 import triaina.webview.entity.device.ToastParams;
 
-public abstract class AbstractWebViewBridgeFragment extends AbstractTriainaFragment {
+public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     private static final String TAG = AbstractWebViewBridgeFragment.class.getSimpleName();
 
     private WebViewBridge mWebViewBridge;
