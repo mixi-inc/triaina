@@ -6,29 +6,29 @@ import triaina.commons.json.annotation.Exclude;
 import triaina.webview.entity.Result;
 
 public class NotificationResult implements Result {
-	private Integer mId;
+	private String mId;
 
 	public NotificationResult() {
 	}
 	
-	public NotificationResult(Integer id) {
+	public NotificationResult(String id) {
 		mId = id;
 	}
 
 	public NotificationResult(Parcel source) {
-		mId = source.readInt();
+		mId = source.readString();
 	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(mId);
+		dest.writeString(mId);
 	}
 	
-	public void setId(Integer id) {
+	public void setId(String id) {
 		mId = id;
 	}
 	
-	public Integer getId() {
+	public String getId() {
 		return mId;
 	}
 
@@ -49,5 +49,4 @@ public class NotificationResult implements Result {
 	public int describeContents() {
 		return 0;
 	}
-
 }

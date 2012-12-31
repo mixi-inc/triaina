@@ -1,6 +1,5 @@
 package triaina.injector.activity;
 
-import triaina.injector.TriainaApplication;
 import triaina.injector.TriainaInjector;
 import triaina.injector.TriainaInjectorFactory;
 

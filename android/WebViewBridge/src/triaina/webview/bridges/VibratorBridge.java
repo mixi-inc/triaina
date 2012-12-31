@@ -1,35 +1,49 @@
 package triaina.webview.bridges;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
+import android.content.Context;
 import android.os.Vibrator;
 import triaina.commons.utils.ArrayUtils;
 import triaina.webview.annotation.Bridge;
-import triaina.webview.entity.device.VibratorVibrateParams;
+import triaina.webview.entity.device.VibrateParams;
 
-public class VibratorBridge implements BridgeObject {
+public class VibratorBridge implements BridgeLifecyclable {
     @Inject
-    private Vibrator mVibrator;
+    private Context mContext;
 
     private boolean mIsEnable;
 
     @Bridge("system.vibrator.vibrate")
-    public void doVibrate(VibratorVibrateParams params) {
-        mIsEnable = true;
+    public void vibrate(VibrateParams params) {
+        Vibrator vibrator = getVibrator();
+        if (vibrator == null)
+            return;
 
         Integer r = params.getRepeat();
-        if (r == null)
-            mVibrator.vibrate(params.getMsec());
-        else
-            mVibrator.vibrate(ArrayUtils.convert(params.getPattern()), r == null ? -1 : r.intValue());
+        try {
+            if (r == null)
+                vibrator.vibrate(params.getMsec());
+            else
+                vibrator.vibrate(ArrayUtils.convert(params.getPattern()), r == null ? -1 : r.intValue());
+        } finally {
+            mIsEnable = true;
+        }
     }
 
     @Bridge("system.vibrator.cancel")
-    public void doCancel() {
-        if (mIsEnable) {
-            mVibrator.cancel();
+    public void cancel() {
+        if (!mIsEnable)
+            return;
+        try {
+            getVibrator().cancel();
+        } finally {
             mIsEnable = false;
         }
+    }
+
+    protected Vibrator getVibrator() {
+        return (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
@@ -38,7 +52,7 @@ public class VibratorBridge implements BridgeObject {
 
     @Override
     public void onPause() {
-        doCancel();
+        cancel();
     }
 
     @Override

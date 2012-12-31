@@ -15,7 +15,8 @@ import triaina.webview.annotation.Domain;
 import triaina.webview.annotation.Layout;
 import triaina.webview.bridges.NetHttpSendBridge;
 import triaina.webview.bridges.NotificationBridge;
-import triaina.webview.bridges.SensorAccelerometerBridge;
+import triaina.webview.bridges.AccelerometerBridge;
+import triaina.webview.bridges.ToastBridge;
 import triaina.webview.bridges.VibratorBridge;
 import triaina.webview.bridges.WebStatusBridge;
 import triaina.webview.bridges.WiFiBridge;
@@ -122,7 +123,8 @@ public class WebViewBridgeAnnotationConfigurator implements
 		configure(bridge, new NetHttpSendBridge(bridge));
 		configure(bridge, new WiFiBridge(bridge));
 		configure(bridge, new VibratorBridge());
-		configure(bridge, new SensorAccelerometerBridge(bridge));
+		configure(bridge, new ToastBridge());
+		configure(bridge, new AccelerometerBridge(bridge));
 		configure(bridge, new NotificationBridge(bridge));
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)

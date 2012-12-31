@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <%= include partials/header.ejs %>
+
+  </head>
+  <body>
+    <div class="accelerometer example">
+         <label class="example_label">Accelerometer</label>
+         <button id="acc_enable_btn" class="btn">Enable</button>
+	 <button id="acc_disable_btn" class="btn">Diable</button>
+	 <p id="acc_x_text"/>
+	 <p id="acc_y_text"/>
+	 <p id="acc_z_text"/>
+    </div>
+  </body>
+  <%= include partials/script.ejs %>
+  <script src="javascripts/sensor.js"></script>
+</html>

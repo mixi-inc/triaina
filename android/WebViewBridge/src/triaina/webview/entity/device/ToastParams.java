@@ -6,34 +6,43 @@ import triaina.commons.json.annotation.Exclude;
 import triaina.webview.entity.Params;
 
 public class ToastParams implements Params {
-	private String mMessage;
+    private String mText;
+    private Integer mDuration;
 
-	public ToastParams() {}
-	
-	public ToastParams(Parcel source) {
-		mMessage = source.readString();
-	}
-	
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(mMessage);
-	}
-	
-	public String getMessage() {
-		return mMessage;
-	}
+    public ToastParams() {
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    public ToastParams(Parcel source) {
+        mText = source.readString();
+        mDuration = source.readInt();
+    }
 
-	@Exclude
-	public static final Parcelable.Creator<ToastParams> CREATOR = new Parcelable.Creator<ToastParams>() {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mText);
+        dest.writeInt(mDuration);
+    }
+
+    public String getText() {
+        return mText;
+    }
+
+    public Integer getDuration() {
+        return mDuration;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Exclude
+    public static final Parcelable.Creator<ToastParams> CREATOR = new Parcelable.Creator<ToastParams>() {
         @Override
         public ToastParams createFromParcel(Parcel source) {
             return new ToastParams(source);
         }
+
         @Override
         public ToastParams[] newArray(int size) {
             return new ToastParams[size];

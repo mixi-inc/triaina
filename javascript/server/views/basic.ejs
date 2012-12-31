@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <%= include partials/header.ejs %>
+
+  </head>
+  <body>
+    <div class="toast example">
+         <label class="example_label">Toast</label>
+         <button id="toast_short_btn" class="btn">Short</button>
+         <button id="toast_long_btn" class="btn">Long</button>
+	 <button id="toast_cancel_btn" class="btn">Cancel</button>
+    </div>
+    <div class="vibrator example">
+         <label class="example_label">Vibrator</label>
+         <button id="vibrator_btn" class="btn">Do</button>
+	 <button id="vibrator_cancel_btn" class="btn">Cancel</button>
+    </div>
+    <div class="notification example">
+         <label class="example_label">Notification</label>
+         <button id="notification_btn" class="btn">Notify</button>
+         <button id="notification_clear_btn" class="btn">Clear</button>
+    </div>
+  </body>
+  <%= include partials/script.ejs %>
+  <script src="javascripts/basic.js"></script>
+</html>

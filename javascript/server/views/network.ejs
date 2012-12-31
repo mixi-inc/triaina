@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <%= include partials/header.ejs %>
+
+  </head>
+  <body>
+    <div class="wifi example">
+         <label class="example_label">WiFi</label>
+         <button id="wifi_enable_btn" class="btn">Enable</button>
+	 <button id="wifi_disable_btn" class="btn">Diable</button>
+	 <button id="wifi_mac_btn" class="btn">Mac Address</button>
+	 <p id="wifi_mac_text"/>
+    </div>
+    <div class="wifip2p example">
+         <label class="example_label">WiFi-Direct</label>
+         <button id="wifip2p_enable_btn" class="btn">Enable</button>
+	 <button id="wifip2p_disable_btn" class="btn">Diable</button>
+	 <button id="wifip2p_discover_btn" class="btn">Discover</button>
+    </div>
+    <div class="xhr example">
+         <label class="example_label">XHR</label>
+         <button id="post_btn" class="btn">Post</button>
+	 <p id="post_state_text"/>
+    </div>
+  </body>
+  <%= include partials/script.ejs %>
+  <script src="javascripts/network.js"></script>
+</html>
