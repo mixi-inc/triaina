@@ -1,15 +1,15 @@
 package triaina.webview.bridges;
 
+import javax.inject.Inject;
+
 import triaina.webview.Callback;
 import triaina.webview.WebViewBridge;
 import triaina.webview.annotation.Bridge;
-import triaina.webview.entity.device.WiFiGetDeviceAddressResult;
-
-import com.google.inject.Inject;
+import triaina.webview.entity.device.WiFiGetMacAddressResult;
 
 import android.net.wifi.WifiManager;
 
-public class WiFiBridge implements BridgeObject {
+public class WiFiBridge implements BridgeLifecyclable {
 	@Inject
 	private WifiManager mWifiManager;
 	
@@ -19,21 +19,21 @@ public class WiFiBridge implements BridgeObject {
 	    mBridge = bridge;
 	}
 	
-	@Bridge("system.wifi.getDeviceAddress")
-	public void doGetDeviceAddress(Callback<WiFiGetDeviceAddressResult> callback) {
+	@Bridge("system.wifi.mac.get")
+	public void getMacAddress(Callback<WiFiGetMacAddressResult> callback) {
 		String addr = mWifiManager.getConnectionInfo().getMacAddress();
-		WiFiGetDeviceAddressResult result = new WiFiGetDeviceAddressResult();
-		result.setDeviceAddress(addr);
+		WiFiGetMacAddressResult result = new WiFiGetMacAddressResult();
+		result.setMacAddress(addr);
 		callback.succeed(mBridge, result);
 	}
 	
 	@Bridge("system.wifi.enable")
-	public void doEnable() {
+	public void enable() {
 		mWifiManager.setWifiEnabled(true);
 	}
 	
 	@Bridge("system.wifi.disable")
-	public void doDisable() {
+	public void disable() {
 		mWifiManager.setWifiEnabled(false);
 	}
 

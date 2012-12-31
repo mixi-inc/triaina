@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.inject.Inject;
 
@@ -20,7 +19,6 @@ import triaina.webview.entity.device.EnvironmentSetParams;
 import triaina.webview.entity.device.FormPictureSelectParams;
 import triaina.webview.entity.device.FormPictureSelectResult;
 import triaina.webview.entity.device.NetBrowserOpenParams;
-import triaina.webview.entity.device.ToastParams;
 
 public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     private static final String TAG = AbstractWebViewBridgeFragment.class.getSimpleName();
@@ -61,11 +59,6 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     @Bridge("system.environment.set")
     public void doEnvironmentSet(EnvironmentSetParams params) {
         mEnvironment.set(params.getName(), params.getValue());
-    }
-
-    @Bridge("system.toast.show")
-    public void doToastShow(ToastParams params) {
-        Toast.makeText(getActivity(), params.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Bridge("system.form.picture.select")

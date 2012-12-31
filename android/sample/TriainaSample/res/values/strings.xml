@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">TriainaSample</string>
+    <string name="title_section3">OTHER</string>
+    <string name="title_section2">SENSOR</string>
+    <string name="title_section1">BASIC</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+</resources>

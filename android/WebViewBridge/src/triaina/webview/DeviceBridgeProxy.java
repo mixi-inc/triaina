@@ -15,7 +15,7 @@ import triaina.commons.json.JSONConverter;
 import triaina.commons.utils.ClassUtils;
 import triaina.commons.utils.FloatUtils;
 import triaina.commons.utils.JSONObjectUtils;
-import triaina.webview.bridges.BridgeObject;
+import triaina.webview.bridges.BridgeLifecyclable;
 import triaina.webview.config.BridgeMethodConfig;
 import triaina.webview.config.BridgeObjectConfig;
 import triaina.webview.entity.Error;
@@ -62,24 +62,28 @@ public class DeviceBridgeProxy {
     public void resume() {
         Collection<Object> bridges = mReceiverMap.values();
         for (Object bridge : bridges) {
-            if (bridge instanceof BridgeObject)
-                ((BridgeObject)bridge).onResume();
+            if (bridge instanceof BridgeLifecyclable)
+                ((BridgeLifecyclable)bridge).onResume();
         }
     }
 
     public void pause() {
         Collection<Object> bridges = mReceiverMap.values();
         for (Object bridge : bridges) {
-            if (bridge instanceof BridgeObject)
-                ((BridgeObject)bridge).onPause();
+            if (bridge instanceof BridgeLifecyclable)
+                ((BridgeLifecyclable)bridge).onPause();
         }
     }
 
     public void destroy() {
         Collection<Object> bridges = mReceiverMap.values();
         for (Object bridge : bridges) {
-            if (bridge instanceof BridgeObject)
-                ((BridgeObject)bridge).onDestroy();
+            try {
+                if (bridge instanceof BridgeLifecyclable)
+                    ((BridgeLifecyclable)bridge).onDestroy();
+            } catch (Exception exp) {
+                Log.w(TAG, exp.getMessage() + "", exp);
+            }
         }
     }
 

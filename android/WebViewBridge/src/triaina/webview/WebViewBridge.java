@@ -53,7 +53,7 @@ public class WebViewBridge extends WebView {
 
     private Map<String, Callback<?>> callbacks = new ConcurrentHashMap<String, Callback<?>>();
 
-    private boolean isDestroyed;
+    private boolean mIsDestroyed;
 
     public WebViewBridge(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -108,13 +108,13 @@ public class WebViewBridge extends WebView {
     }
 
     public String call(String dest, Params params) {
-        if (isDestroyed)
+        if (mIsDestroyed)
             return null;
         return notifyToWebInternal(null, dest, "params", params);
     }
 
     public String call(String dest, Params params, Callback<?> callback) {
-        if (isDestroyed)
+        if (mIsDestroyed)
             return null;
 
         String id = mSeq.incrementAndGet() + "";
@@ -134,13 +134,13 @@ public class WebViewBridge extends WebView {
     }
 
     public String returnToWeb(String id, String dest, Result result) {
-        if (isDestroyed || TextUtils.isEmpty(id))
+        if (mIsDestroyed || TextUtils.isEmpty(id))
             return null;
         return notifyToWebInternal(id, dest, "result", result);
     }
 
     public String returnToWeb(String id, String dest, Error error) {
-        if (isDestroyed || TextUtils.isEmpty(id)) {
+        if (mIsDestroyed || TextUtils.isEmpty(id)) {
             return null;
         }
         return notifyToWebInternal(id, dest, "error", error);
@@ -181,14 +181,17 @@ public class WebViewBridge extends WebView {
 
     @Override
     public void destroy() {
-        mDeviceBridgeProxy.destroy();
-        
-        //workaround for some device
+        if (mIsDestroyed)
+            return;
+
+        // workaround for some device
         try {
-        	super.destroy();
-        } catch (Exception epx) {	
+            mDeviceBridgeProxy.destroy();
+            super.destroy();
+        } catch (Exception exp) {
+            Log.w(TAG, exp.getMessage() + "", exp);
         } finally {
-        	isDestroyed = true;
+            mIsDestroyed = true;
         }
     }
 

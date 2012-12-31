@@ -1,6 +1,8 @@
 package triaina.webview.bridges;
 
-import com.google.inject.Inject;
+import java.util.Random;
+
+import javax.inject.Inject;
 
 import triaina.commons.workerservice.Job;
 import triaina.commons.workerservice.NetworkWorkerService;
@@ -15,8 +17,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.webkit.CookieManager;
 
-public class NetHttpSendBridge implements BridgeObject {
-    private Handler mHandler = new Handler();
+public class NetHttpSendBridge implements BridgeLifecyclable {
+	@Inject
+    private Handler mHandler;
 
     @Inject
     private Context mContext;
@@ -38,6 +41,8 @@ public class NetHttpSendBridge implements BridgeObject {
         HttpRequestJob job = new HttpRequestJob();
         job.setCookie(manager.getCookie(params.getUrl()));
         job.setParams(params);
+        if (params.getNotification() != null)
+        	job.setNotificationId(new Random().nextInt());
         return job;
     }
 

@@ -1,6 +1,6 @@
 package triaina.webview.bridges;
 
-public interface BridgeObject {
+public interface BridgeLifecyclable {
     public void onResume();
     
     public void onPause();

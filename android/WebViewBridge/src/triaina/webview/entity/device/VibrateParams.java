@@ -5,15 +5,15 @@ import triaina.webview.entity.Params;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class VibratorVibrateParams implements Params {
+public class VibrateParams implements Params {
 	private Long[] mPattern;
 	private Integer mRepeat;
 	private Long mMsec;
 	
-	public VibratorVibrateParams() {}
+	public VibrateParams() {}
 	
-	public VibratorVibrateParams(Parcel source) {
-		mPattern = (Long[])source.readArray(VibratorVibrateParams.class.getClassLoader());
+	public VibrateParams(Parcel source) {
+		mPattern = (Long[])source.readArray(VibrateParams.class.getClassLoader());
 		mRepeat = source.readInt();
 		mMsec = source.readLong();
 	}
@@ -50,14 +50,14 @@ public class VibratorVibrateParams implements Params {
 	}
 
 	@Exclude
-	public static final Parcelable.Creator<VibratorVibrateParams> CREATOR = new Parcelable.Creator<VibratorVibrateParams>() {
+	public static final Parcelable.Creator<VibrateParams> CREATOR = new Parcelable.Creator<VibrateParams>() {
         @Override
-        public VibratorVibrateParams createFromParcel(Parcel source) {
-            return new VibratorVibrateParams(source);
+        public VibrateParams createFromParcel(Parcel source) {
+            return new VibrateParams(source);
         }
         @Override
-        public VibratorVibrateParams[] newArray(int size) {
-            return new VibratorVibrateParams[size];
+        public VibrateParams[] newArray(int size) {
+            return new VibrateParams[size];
         }
     };
     

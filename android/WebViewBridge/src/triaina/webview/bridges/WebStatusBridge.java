@@ -15,7 +15,7 @@ import android.content.res.Configuration;
 
 @SuppressLint("UseSparseArrays")
 @SuppressWarnings("deprecation")
-public class WebStatusBridge implements BridgeObject {
+public class WebStatusBridge implements BridgeLifecyclable {
     public static final Map<Integer, String> ORIENTATION_MAP;
     static {
         Map<Integer, String> map = new HashMap<Integer, String>();

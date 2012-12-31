@@ -116,6 +116,11 @@ var WebBridge = (function(){
             return id;
         };
         this.call = function(dest, params, callback){
+	    if (typeof(params) == 'function') {
+		callback = params;
+		params = undefined;
+	    }
+
             var request = {
                 bridge: BRIDGE_VERSION,
                 dest: dest,
@@ -135,6 +140,9 @@ var WebBridge = (function(){
         };
         this.execute = function(request, callback){
             this.log(request);
+	    if (!request.params)
+		request.params = {};
+
             var requestJSON = JSON.stringify(request);
             if(callback && request.id){
                 this._callbackTable[request.id] = callback;

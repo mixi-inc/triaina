@@ -5,13 +5,13 @@ import triaina.webview.entity.Params;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class SensorAccelerometerEnableParams implements Params {
+public class AccelerometerEnableParams implements Params {
 	private Integer mRate;
 	private String mCallback;
 	
-	public SensorAccelerometerEnableParams() {}
+	public AccelerometerEnableParams() {}
 	
-	public SensorAccelerometerEnableParams(Parcel source) {
+	public AccelerometerEnableParams(Parcel source) {
 		mRate = source.readInt();
 		mCallback = source.readString();
 	}
@@ -31,14 +31,14 @@ public class SensorAccelerometerEnableParams implements Params {
 	}
 	
 	@Exclude
-	public static final Parcelable.Creator<SensorAccelerometerEnableParams> CREATOR = new Parcelable.Creator<SensorAccelerometerEnableParams>() {
+	public static final Parcelable.Creator<AccelerometerEnableParams> CREATOR = new Parcelable.Creator<AccelerometerEnableParams>() {
 		@Override
-		public SensorAccelerometerEnableParams createFromParcel(Parcel source) {
-            return new SensorAccelerometerEnableParams(source);
+		public AccelerometerEnableParams createFromParcel(Parcel source) {
+            return new AccelerometerEnableParams(source);
 		}
 		@Override
-		public SensorAccelerometerEnableParams[] newArray(int size) {
-            return new SensorAccelerometerEnableParams[size];
+		public AccelerometerEnableParams[] newArray(int size) {
+            return new AccelerometerEnableParams[size];
         }
     };
     

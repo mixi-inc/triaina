@@ -17,7 +17,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 public class WorkerService extends AbstractIntentService {
-	private static final String TAG = WorkerService.class.getCanonicalName();
+	private static final String TAG = WorkerService.class.getSimpleName();
 	
 	public static final String EXTRA_JOB = "job";
 	public static final String EXTRA_RECEIVER = "receiver";
@@ -28,7 +28,6 @@ public class WorkerService extends AbstractIntentService {
 	private AtomicReference<Worker<?>> mCurrentWorker = new AtomicReference<Worker<?>>();
 	
 	private volatile Handler mHandler;
-	
     
 	private BroadcastReceiver mCancelReceiver = new BroadcastReceiver() {
         @Override
@@ -37,6 +36,9 @@ public class WorkerService extends AbstractIntentService {
             
         	try {
         		Abortable abortable = (Abortable)getCurrentWorker();
+        		if (abortable == null)
+        		    return;
+
         		boolean confirmed = intent.getBooleanExtra(EXTRA_CONFIRMED, false);
         		if (!confirmed)
         			abortable.confirm(WorkerService.this, mHandler);
