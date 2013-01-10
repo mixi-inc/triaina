@@ -161,7 +161,7 @@ public class WebViewBridge extends WebView {
             String s = json.toString();
             Log.d(TAG, "Notify to Web with " + s);
 
-            String js = mHelper.makeJavaScript("WebBridge.notifyToWeb", URLEncoder.encode(s, "UTF-8"));
+            String js = mHelper.makeJavaScript("WebBridge.notifyToWeb", URLEncoder.encode(s, "UTF-8").replace("+", "%20"));
 
             loadUrl(js);
             return js;// for test
