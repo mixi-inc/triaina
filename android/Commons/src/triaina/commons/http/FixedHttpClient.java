@@ -37,7 +37,7 @@ public class FixedHttpClient {
 
         return client;
     }
-    
+
     private static void workAroundReverseDnsBugInHoneycombAndEarlier(HttpClient client) {
         // Android had a bug where HTTPS made reverse DNS lookups (fixed in Ice Cream Sandwich) 
         // http://code.google.com/p/android/issues/detail?id=13117
