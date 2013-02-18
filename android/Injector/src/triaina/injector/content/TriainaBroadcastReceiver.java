@@ -16,7 +16,8 @@ public abstract class TriainaBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public final void onReceive(Context context, Intent intent) {
-        TriainaInjector injector = TriainaInjectorFactory.getInjector(context);
+        TriainaInjector injector = TriainaInjectorFactory.getInjector(
+                context.getApplicationContext());
         try {
             injector.injectMembersWithoutViews(this);
             handleReceive(context, intent);
