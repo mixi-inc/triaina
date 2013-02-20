@@ -79,8 +79,12 @@ public class TriainaInjectorFactory {
 
     		try {
     			for (String name : moduleNames) {
-    				final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-    				modules.add(clazz.newInstance());
+                    final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                    try {
+                        modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                    } catch(final NoSuchMethodException noActivityConstructorException) {
+                        modules.add(clazz.newInstance());
+                    }
     			}
     		} catch (Exception exp) {
     			throw new CommonRuntimeException(exp);
