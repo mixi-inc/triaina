@@ -50,9 +50,12 @@ public class HttpRequestJob implements Job {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeParcelable(mParams, 0);
+		dest.writeParcelable(mParams, flags);
 		dest.writeString(mCookie);
-		dest.writeInt(mNotificationId);
+		if (mNotificationId != null)
+		    dest.writeInt(mNotificationId);
+		else
+		    dest.writeInt(0);
 	}
 
 	public static final Parcelable.Creator<HttpRequestJob> CREATOR = new Parcelable.Creator<HttpRequestJob>() {
