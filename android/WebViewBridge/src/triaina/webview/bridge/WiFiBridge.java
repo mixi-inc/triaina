@@ -1,4 +1,4 @@
-package triaina.webview.bridges;
+package triaina.webview.bridge;
 
 import javax.inject.Inject;
 

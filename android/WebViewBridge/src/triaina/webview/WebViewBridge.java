@@ -55,6 +55,8 @@ public class WebViewBridge extends WebView {
 
     private boolean mIsDestroyed;
 
+    private boolean mNoPause;
+
     public WebViewBridge(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -92,6 +94,15 @@ public class WebViewBridge extends WebView {
         }
 
         mDeviceBridgeProxy.addBridgeObjectConfig(bridgeObject, config);
+    }
+
+    public void setNoPause(boolean noPause) {
+        mNoPause = noPause;   
+    }
+
+    public void onPause() {
+        if (!mNoPause)
+            super.onPause();
     }
 
     /**

@@ -1,4 +1,4 @@
-package triaina.webview.bridges;
+package triaina.webview.bridge;
 
 import java.util.Random;
 
@@ -11,7 +11,7 @@ import triaina.webview.WebViewBridge;
 import triaina.webview.annotation.Bridge;
 import triaina.webview.entity.device.NetHttpSendParams;
 import triaina.webview.entity.device.NetHttpSendResult;
-import triaina.webview.jobs.HttpRequestJob;
+import triaina.webview.job.HttpRequestJob;
 import triaina.webview.receiver.CallbackReceiver;
 import android.content.Context;
 import android.os.Handler;

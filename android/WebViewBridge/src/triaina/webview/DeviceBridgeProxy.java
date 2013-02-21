@@ -15,7 +15,7 @@ import triaina.commons.json.JSONConverter;
 import triaina.commons.utils.ClassUtils;
 import triaina.commons.utils.FloatUtils;
 import triaina.commons.utils.JSONObjectUtils;
-import triaina.webview.bridges.BridgeLifecyclable;
+import triaina.webview.bridge.BridgeLifecyclable;
 import triaina.webview.config.BridgeMethodConfig;
 import triaina.webview.config.BridgeObjectConfig;
 import triaina.webview.entity.Error;

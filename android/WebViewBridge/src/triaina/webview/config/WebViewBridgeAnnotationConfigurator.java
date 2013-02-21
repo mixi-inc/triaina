@@ -10,17 +10,18 @@ import triaina.commons.utils.ClassUtils;
 import triaina.webview.Callback;
 import triaina.webview.InjectorHelper;
 import triaina.webview.WebViewBridge;
+import triaina.webview.annotation.NoPause;
 import triaina.webview.annotation.Bridge;
 import triaina.webview.annotation.Domain;
 import triaina.webview.annotation.Layout;
-import triaina.webview.bridges.NetHttpSendBridge;
-import triaina.webview.bridges.NotificationBridge;
-import triaina.webview.bridges.AccelerometerBridge;
-import triaina.webview.bridges.ToastBridge;
-import triaina.webview.bridges.VibratorBridge;
-import triaina.webview.bridges.WebStatusBridge;
-import triaina.webview.bridges.WiFiBridge;
-import triaina.webview.bridges.WiFiP2PBridge;
+import triaina.webview.bridge.AccelerometerBridge;
+import triaina.webview.bridge.NetHttpSendBridge;
+import triaina.webview.bridge.NotificationBridge;
+import triaina.webview.bridge.ToastBridge;
+import triaina.webview.bridge.VibratorBridge;
+import triaina.webview.bridge.WebStatusBridge;
+import triaina.webview.bridge.WiFiBridge;
+import triaina.webview.bridge.WiFiP2PBridge;
 import triaina.webview.entity.Params;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -54,6 +55,7 @@ public class WebViewBridgeAnnotationConfigurator implements
 		WebViewBridge webViewBridge = (WebViewBridge) activity
 				.findViewById(config.getWebViewBridgeId());
 		webViewBridge.setDomainConfig(createDomainConfig(clazz));
+		webViewBridge.setNoPause(hasNoPause(clazz));
 
 		return webViewBridge;
 	}
@@ -71,6 +73,7 @@ public class WebViewBridgeAnnotationConfigurator implements
 
 		WebViewBridge webViewBridge = (WebViewBridge) inflatedView.findViewById(config.getWebViewBridgeId());
 		webViewBridge.setDomainConfig(createDomainConfig(clazz));
+		webViewBridge.setNoPause(hasNoPause(clazz));
 
 		return webViewBridge;
 	}
@@ -115,6 +118,10 @@ public class WebViewBridgeAnnotationConfigurator implements
 			Log.d(TAG, "Domain config from cache");
 
 		return config;
+	}
+	
+	private boolean hasNoPause(Class<?> clazz) {
+	    return clazz.getAnnotation(NoPause.class) != null;
 	}
 
 	public void configure(WebViewBridge bridge) {

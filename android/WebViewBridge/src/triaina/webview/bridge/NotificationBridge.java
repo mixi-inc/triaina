@@ -1,4 +1,4 @@
-package triaina.webview.bridges;
+package triaina.webview.bridge;
 
 import java.util.Random;
 
