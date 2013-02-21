@@ -1,4 +1,4 @@
-package triaina.webview.jobs;
+package triaina.webview.job;
 
 import android.os.Parcel;
 
@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import triaina.commons.workerservice.Job;
 import triaina.commons.workerservice.annotation.Assign;
 import triaina.webview.entity.device.NetHttpSendParams;
-import triaina.webview.workers.HttpRequestWorker;
+import triaina.webview.worker.HttpRequestWorker;
 
 @Assign(worker = HttpRequestWorker.class)
 public class HttpRequestJob implements Job {

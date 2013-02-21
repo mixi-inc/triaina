@@ -1,4 +1,4 @@
-package triaina.webview.workers;
+package triaina.webview.worker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +43,7 @@ import triaina.webview.entity.Result;
 import triaina.webview.entity.device.NetHttpSendParams;
 import triaina.webview.entity.device.NetHttpSendResult;
 import triaina.webview.entity.device.SendNotificationParams;
-import triaina.webview.jobs.HttpRequestJob;
+import triaina.webview.job.HttpRequestJob;
 import triaina.webview.receiver.CallbackReceiver;
 
 public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {

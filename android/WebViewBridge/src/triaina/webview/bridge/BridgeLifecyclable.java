@@ -1,4 +1,4 @@
-package triaina.webview.bridges;
+package triaina.webview.bridge;
 
 public interface BridgeLifecyclable {
     public void onResume();
