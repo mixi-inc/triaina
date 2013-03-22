@@ -39,7 +39,7 @@ public class WebViewBridge extends WebView {
     public static final float VERSION = 1.2F;
     public static final double COMPATIBLE_VERSION = Math.floor(VERSION);
 
-    private static final String TAG = "WebViewBridge";
+    private static final String TAG = WebViewBridge.class.getSimpleName();
     private static final String JAVASCRIPT_INTERFACE_NAME = "DeviceBridge";
 
     private Handler mHandler;

@@ -81,7 +81,7 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
         View inflatedView = mConfigurator.loadInflatedView(this, inflater, container);
         mWebViewBridge = mConfigurator.loadWebViewBridge(this, inflatedView);
         mConfigurator.configure(mWebViewBridge);
-        mConfigurator.configure(mWebViewBridge, this);
+        mConfigurator.registerBridge(mWebViewBridge, this);
         configureSettings();
         configureClients();
         return inflatedView;

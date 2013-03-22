@@ -19,7 +19,7 @@ import triaina.sample.R;
 import triaina.webview.AbstractWebViewBridgeFragment;
 import triaina.webview.annotation.Domain;
 import triaina.webview.annotation.Layout;
-import triaina.webview.annotation.WebViewBridge;
+import triaina.webview.annotation.WebViewBridgeResouce;
 
 public class MainActivity extends TriainaFragmentActivity {
 	public static final String HOST = "10.63.245.16";
@@ -114,7 +114,7 @@ public class MainActivity extends TriainaFragmentActivity {
 
 	@Domain(HOST)
 	@Layout(R.layout.fragment_webview)
-	@WebViewBridge(R.id.webview)
+	@WebViewBridgeResouce(R.id.webview)
 	public static class WebViewFragment extends AbstractWebViewBridgeFragment {
 		private static final String[] ADDR_TABLE = new String[] { "basic",
 				"sensor", "network" };

@@ -1,10 +1,6 @@
 package triaina.injector.activity;
 
-import java.util.HashMap;
-
 import javax.inject.Inject;
-
-import com.google.inject.Key;
 
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnConfigurationChangedEvent;

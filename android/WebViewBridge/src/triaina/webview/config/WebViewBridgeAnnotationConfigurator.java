@@ -36,7 +36,7 @@ import android.webkit.WebSettings;
 
 public class WebViewBridgeAnnotationConfigurator implements
 		WebViewBridgeConfigurator {
-	private static final String TAG = "WebViewBridgeAnnotationConfigurator";
+	private static final String TAG = WebViewBridgeAnnotationConfigurator.class.getSimpleName();
 
 	@Inject
 	private ConfigCache mConfigCache;
@@ -47,6 +47,7 @@ public class WebViewBridgeAnnotationConfigurator implements
 	@Inject
 	private Context mContext;
 
+	@Override
 	public WebViewBridge loadWebViewBridge(Activity activity) {
 		Class<?> clazz = activity.getClass();
 		LayoutConfig config = createLayoutConfig(clazz);
@@ -60,6 +61,7 @@ public class WebViewBridgeAnnotationConfigurator implements
 		return webViewBridge;
 	}
 
+	@Override
 	public View loadInflatedView(Fragment fragment, LayoutInflater inflater,
 			ViewGroup container) {
 		Class<?> clazz = fragment.getClass();
@@ -67,6 +69,7 @@ public class WebViewBridgeAnnotationConfigurator implements
 		return inflater.inflate(config.getLayoutId(), container, false);
 	}
 
+	@Override
 	public WebViewBridge loadWebViewBridge(Fragment fragment, View inflatedView) {
 		Class<?> clazz = fragment.getClass();
 		LayoutConfig config = createLayoutConfig(clazz);
@@ -90,8 +93,8 @@ public class WebViewBridgeAnnotationConfigurator implements
 						"Must be defined as use layout");
 			}
 
-			triaina.webview.annotation.WebViewBridge bridgeAnn = (triaina.webview.annotation.WebViewBridge) clazz
-					.getAnnotation(triaina.webview.annotation.WebViewBridge.class);
+			triaina.webview.annotation.WebViewBridgeResouce bridgeAnn = (triaina.webview.annotation.WebViewBridgeResouce) clazz
+					.getAnnotation(triaina.webview.annotation.WebViewBridgeResouce.class);
 			if (bridgeAnn == null)
 				throw new InvalidConfigurationRuntimeException(
 						"Must be defined as use layout");
@@ -124,21 +127,23 @@ public class WebViewBridgeAnnotationConfigurator implements
 	    return clazz.getAnnotation(NoPause.class) != null;
 	}
 
+	@Override
 	public void configure(WebViewBridge bridge) {
-		configure(bridge, mContext);
-		configure(bridge, new WebStatusBridge(bridge));
-		configure(bridge, new NetHttpSendBridge(bridge));
-		configure(bridge, new WiFiBridge(bridge));
-		configure(bridge, new VibratorBridge());
-		configure(bridge, new ToastBridge());
-		configure(bridge, new AccelerometerBridge(bridge));
-		configure(bridge, new NotificationBridge(bridge));
+		registerBridge(bridge, mContext);
+		registerBridge(bridge, new WebStatusBridge(bridge));
+		registerBridge(bridge, new NetHttpSendBridge(bridge));
+		registerBridge(bridge, new WiFiBridge(bridge));
+		registerBridge(bridge, new VibratorBridge());
+		registerBridge(bridge, new ToastBridge());
+		registerBridge(bridge, new AccelerometerBridge(bridge));
+		registerBridge(bridge, new NotificationBridge(bridge));
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-			configure(bridge, new WiFiP2PBridge(bridge));
+			registerBridge(bridge, new WiFiP2PBridge(bridge));
 	}
 
-	public void configure(WebViewBridge webViewBridge, Object bridgeObject) {
+	@Override
+	public void registerBridge(WebViewBridge webViewBridge, Object bridgeObject) {
 		bridgeObject = mInjectorHelper.inject(mContext, bridgeObject);
 
 		Class<?> clazz = bridgeObject.getClass();

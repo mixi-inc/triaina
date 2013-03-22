@@ -7,7 +7,7 @@ import android.webkit.WebView;
 import android.webkit.WebStorage.QuotaUpdater;
 
 public class TriainaWebChromeClient extends WebChromeClient {
-	private static final String TAG = "TriainaWebChromeClient";
+	private static final String TAG = TriainaWebChromeClient.class.getSimpleName();
 	
 	private Activity mActivity;
 

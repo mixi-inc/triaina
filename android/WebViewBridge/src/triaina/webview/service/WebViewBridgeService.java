@@ -4,8 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 
 public class WebViewBridgeService extends IntentService {
-	private static final String TAG = "WebViewBridgeService";
-	
+	private static final String TAG = WebViewBridgeService.class.getSimpleName();
+
 	public WebViewBridgeService() {
 		super(TAG);
 	}

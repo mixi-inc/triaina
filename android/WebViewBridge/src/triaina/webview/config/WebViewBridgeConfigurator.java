@@ -17,7 +17,7 @@ public interface WebViewBridgeConfigurator {
 	
 	public void configure(WebViewBridge webViewBridge);
 	
-	public void configure(WebViewBridge webViewBridge, Object bridgeObject);
+	public void registerBridge(WebViewBridge webViewBridge, Object bridgeObject);
 	
 	public void configureSetting(WebViewBridge webViewBridge);
 }

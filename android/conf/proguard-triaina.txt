@@ -1,0 +1,35 @@
+# Settings for triaina
+
+-keep public class triaina.webview.DeviceBridgeProxy {
+    public void notifyToDevice(java.lang.String);
+}
+
+-keepclassmembers class * {
+    @triaina.webview.annotation.Bridge <methods>;
+}
+
+-keep class * implements triaina.webview.entity.Error {
+    *;
+}
+
+-keep class * implements triaina.webview.entity.Params {
+    *;
+}
+
+-keep class * implements triaina.webview.entity.Result {
+    *;
+}
+
+-keep class triaina.commons.http.FixedHttpClient {
+    *;
+}
+
+-keep public class triaina.webview.WebViewBridgeModule
+
+-keep class * implements triaina.commons.workerservice.Worker {
+    *;
+}
+
+-keep class * implements triaina.commons.workerservice.Job {
+    *;
+}

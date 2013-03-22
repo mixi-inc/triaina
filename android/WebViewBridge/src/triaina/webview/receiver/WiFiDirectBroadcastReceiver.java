@@ -18,7 +18,7 @@ import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver implements
         PeerListListener {
 	@SuppressWarnings("unused")
-    private static final String TAG = "WiFiDirectBroadcastReceiver";
+    private static final String TAG = WiFiDirectBroadcastReceiver.class.getSimpleName();
 	private WifiP2pManager mManager;
 	private Channel mChannel;
 	private WebViewBridge mBridge;

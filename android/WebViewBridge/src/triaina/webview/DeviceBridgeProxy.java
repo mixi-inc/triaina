@@ -31,7 +31,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 public class DeviceBridgeProxy {
-    private static final String TAG = "DeviceBridgeProxy";
+    private static final String TAG = DeviceBridgeProxy.class.getSimpleName();
 
     private CallbackHelper mCallbackHelper = new CallbackHelper();
 

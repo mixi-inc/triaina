@@ -8,7 +8,6 @@ import triaina.webview.config.WebViewBridgeConfigurator;
 import com.google.inject.Singleton;
 
 public class WebViewBridgeModule extends AbstractTriainaModule {
-
 	@Override
 	protected void configure() {
 		bind(WebViewBridgeConfigurator.class).to(WebViewBridgeAnnotationConfigurator.class).in(ContextSingleton.class);

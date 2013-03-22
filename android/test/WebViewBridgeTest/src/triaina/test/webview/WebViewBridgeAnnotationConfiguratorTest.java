@@ -6,7 +6,7 @@ import triaina.webview.R;
 import triaina.webview.annotation.Bridge;
 import triaina.webview.annotation.Domain;
 import triaina.webview.annotation.Layout;
-import triaina.webview.annotation.WebViewBridge;
+import triaina.webview.annotation.WebViewBridgeResouce;
 import triaina.webview.config.BridgeMethodConfig;
 import triaina.webview.config.BridgeObjectConfig;
 import triaina.webview.config.ConfigCache;
@@ -37,10 +37,10 @@ public class WebViewBridgeAnnotationConfiguratorTest extends AndroidTestCase {
 		assertEquals("example.com", bridge.getDomainConfig().getDomains()[0]);
 	}
 
-	public void testConfigureBridge() {
+	public void testRegisterBridge() {
 		MockActivity mock = new MockActivity(getContext());
 		triaina.webview.WebViewBridge webViewBridge = new triaina.webview.WebViewBridge(getContext());
-		mConfigurator.configure(webViewBridge, mock);
+		mConfigurator.registerBridge(webViewBridge, mock);
 		
 		BridgeObjectConfig objectConfig = webViewBridge.getBridgeConfigSet();
 		BridgeMethodConfig methodConfig = objectConfig.get("aaa");
@@ -57,7 +57,7 @@ public class WebViewBridgeAnnotationConfiguratorTest extends AndroidTestCase {
         }
 	}
 	
-	@WebViewBridge(R.id.webview)
+	@WebViewBridgeResouce(R.id.webview)
 	@Layout(R.layout.main)
 	@Domain("example.com")
 	static class MockActivity extends Activity {

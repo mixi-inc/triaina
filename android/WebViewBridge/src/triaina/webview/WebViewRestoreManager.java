@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class WebViewRestoreManager {
-	private static final String TAG = "WebViewRestoreManager";
+	private static final String TAG = WebViewRestoreManager.class.getSimpleName();
 
 	private static final String EXTRA_WEBVIEW_PICTURE = "_picture";
 	private static final String EXTRA_WEBVIEW_ID = "_webview_id";

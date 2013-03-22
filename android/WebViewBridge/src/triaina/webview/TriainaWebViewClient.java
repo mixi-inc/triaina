@@ -6,7 +6,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class TriainaWebViewClient extends WebViewClient {
-    private static final String TAG = "TriainaWebViewClient";
+    private static final String TAG = TriainaWebViewClient.class.getSimpleName();
     
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {

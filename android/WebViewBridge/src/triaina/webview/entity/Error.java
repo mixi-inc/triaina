@@ -2,11 +2,10 @@ package triaina.webview.entity;
 
 import triaina.commons.json.annotation.Exclude;
 
-import triaina.commons.proguard.NoProGuard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Error implements Parcelable, NoProGuard {
+public class Error implements Parcelable {
 	private String mCode;
 	private String mMessage;
 	private String mData;
