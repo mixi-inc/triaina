@@ -1,5 +1,12 @@
 # Settings for triaina
 
+# modules are instantiated by reflection so make sure their
+# constructors don't get stripped:
+-keepclassmembers class * extends com.google.inject.Module {
+    <init> ();
+    <init> (android.content.Context);
+}
+
 -keep public class triaina.webview.DeviceBridgeProxy {
     public void notifyToDevice(java.lang.String);
 }
