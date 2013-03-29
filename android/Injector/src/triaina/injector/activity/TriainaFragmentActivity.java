@@ -1,7 +1,9 @@
 package triaina.injector.activity;
 
-import triaina.injector.TriainaInjector;
-import triaina.injector.TriainaInjectorFactory;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.inject.Inject;
 
@@ -18,10 +20,11 @@ import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
 import roboguice.service.event.OnDestroyEvent;
 import roboguice.service.event.OnStartEvent;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import triaina.injector.TriainaInjector;
+import triaina.injector.TriainaInjectorFactory;
+import triaina.injector.activity.event.OnPostCreateEvent;
+import triaina.injector.activity.event.OnRestoreInstanceStateEvent;
+import triaina.injector.activity.event.OnSaveInstanceStateEvent;
 
 public class TriainaFragmentActivity extends FragmentActivity {
 	protected EventManager eventManager;
@@ -39,6 +42,12 @@ public class TriainaFragmentActivity extends FragmentActivity {
 	}
 
 	@Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        eventManager.fire(new OnPostCreateEvent(savedInstanceState));
+    }
+
+    @Override
 	protected void onRestart() {
 		super.onRestart();
 		eventManager.fire(new OnRestartEvent());
@@ -91,6 +100,18 @@ public class TriainaFragmentActivity extends FragmentActivity {
 	}
 
 	@Override
+    protected void onSaveInstanceState (final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        eventManager.fire(new OnSaveInstanceStateEvent(outState));
+    }
+
+    @Override
+    protected void onRestoreInstanceState (final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        eventManager.fire(new OnRestoreInstanceStateEvent(savedInstanceState));
+    }
+
+    @Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		final Configuration currentConfig = getResources().getConfiguration();
 		super.onConfigurationChanged(newConfig);

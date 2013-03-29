@@ -20,6 +20,9 @@ import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
 import triaina.injector.TriainaInjector;
 import triaina.injector.TriainaInjectorFactory;
+import triaina.injector.activity.event.OnPostCreateEvent;
+import triaina.injector.activity.event.OnRestoreInstanceStateEvent;
+import triaina.injector.activity.event.OnSaveInstanceStateEvent;
 
 import javax.inject.Inject;
 
@@ -35,6 +38,12 @@ public class TriainaAccountAuthenticatorActivity extends AccountAuthenticatorAct
         injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
         mEventManager.fire(new OnCreateEvent(savedInstanceState));
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mEventManager.fire(new OnPostCreateEvent(savedInstanceState));
     }
 
     @Override
@@ -87,6 +96,18 @@ public class TriainaAccountAuthenticatorActivity extends AccountAuthenticatorAct
                 super.onDestroy();
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState (final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mEventManager.fire(new OnSaveInstanceStateEvent(outState));
+    }
+
+    @Override
+    protected void onRestoreInstanceState (final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mEventManager.fire(new OnRestoreInstanceStateEvent(savedInstanceState));
     }
 
     @Override
