@@ -1,13 +1,12 @@
 package triaina.injector.activity;
 
-import com.google.inject.Inject;
-
-import triaina.injector.TriainaInjector;
-import triaina.injector.TriainaInjectorFactory;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
+import com.google.inject.Inject;
+
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnConfigurationChangedEvent;
 import roboguice.activity.event.OnContentChangedEvent;
@@ -21,6 +20,11 @@ import roboguice.activity.event.OnStartEvent;
 import roboguice.activity.event.OnStopEvent;
 import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
+import triaina.injector.TriainaInjector;
+import triaina.injector.TriainaInjectorFactory;
+import triaina.injector.activity.event.OnPostCreateEvent;
+import triaina.injector.activity.event.OnRestoreInstanceStateEvent;
+import triaina.injector.activity.event.OnSaveInstanceStateEvent;
 
 public class TriainaActivity extends Activity {
     protected EventManager mEventManager;
@@ -34,6 +38,12 @@ public class TriainaActivity extends Activity {
     	injector.injectMembersWithoutViews(this);
     	super.onCreate(savedInstanceState);
     	mEventManager.fire(new OnCreateEvent(savedInstanceState));
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mEventManager.fire(new OnPostCreateEvent(savedInstanceState));
     }
 
     @Override
@@ -86,6 +96,18 @@ public class TriainaActivity extends Activity {
                 super.onDestroy();
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState (final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mEventManager.fire(new OnSaveInstanceStateEvent(outState));
+    }
+
+    @Override
+    protected void onRestoreInstanceState (final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mEventManager.fire(new OnRestoreInstanceStateEvent(savedInstanceState));
     }
 
     @Override

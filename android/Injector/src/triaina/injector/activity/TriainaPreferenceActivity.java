@@ -1,6 +1,10 @@
 package triaina.injector.activity;
 
-import javax.inject.Inject;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnConfigurationChangedEvent;
@@ -19,11 +23,11 @@ import roboguice.service.event.OnDestroyEvent;
 import roboguice.service.event.OnStartEvent;
 import triaina.injector.TriainaInjector;
 import triaina.injector.TriainaInjectorFactory;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
+import triaina.injector.activity.event.OnPostCreateEvent;
+import triaina.injector.activity.event.OnRestoreInstanceStateEvent;
+import triaina.injector.activity.event.OnSaveInstanceStateEvent;
+
+import javax.inject.Inject;
 
 public class TriainaPreferenceActivity extends PreferenceActivity {
     protected EventManager eventManager;
@@ -40,6 +44,12 @@ public class TriainaPreferenceActivity extends PreferenceActivity {
         injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        eventManager.fire(new OnPostCreateEvent(savedInstanceState));
     }
 
     @Override
@@ -107,6 +117,18 @@ public class TriainaPreferenceActivity extends PreferenceActivity {
                 super.onDestroy();
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState (final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        eventManager.fire(new OnSaveInstanceStateEvent(outState));
+    }
+
+    @Override
+    protected void onRestoreInstanceState (final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        eventManager.fire(new OnRestoreInstanceStateEvent(savedInstanceState));
     }
 
     @Override
