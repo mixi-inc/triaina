@@ -37,6 +37,7 @@
         self.model = aModel;
         aModel.adapter = self;
         self.webView = aWebView;
+        self.sessionKey = [NSString stringWithFormat:@"%x", rand()];
         self.logFilter = TriainaLogTypeWarn;
     }
     return self;
@@ -66,10 +67,7 @@
 #pragma mark - Initializer Methods
 
 - (void)initializeTriaina {
-    if(self.triainaInitialized)
-        return;
 
-    self.sessionKey = [NSString stringWithFormat:@"%x", rand()];
     NSString *script = [NSString stringWithFormat:
                         @"window.DeviceBridge = {};"
                         @"window.DeviceBridge.notifyToDevice = function(msg) {"
@@ -295,7 +293,7 @@
         if(self.consoleEnabled && !self.consoleInitialized)
             [self initializeConsole];
 
-        if(_triainaEnabled && !self.triainaInitialized)
+        if(_triainaEnabled)
             [self initializeTriaina];
     }
 
