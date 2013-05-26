@@ -9,8 +9,9 @@
 #import "TriainaWebViewAdapter.h"
 #import "TriainaWebBridgeModel.h"
 #import "TriainaConfig.h"
-#import "SBJson.h"
 #import "NSString+Util.h"
+#import "NSData+JSON.h"
+#import "NSObject+JSON.h"
 
 @interface TriainaWebViewAdapter()
 
@@ -177,7 +178,8 @@
 
 - (void)sendMessageToWeb:(NSDictionary*)message
 {
-    NSString *json = [message JSONRepresentation];
+    NSData *jsonData = [message JSONRepresentation];
+    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSString *call = [NSString stringWithFormat:@"WebBridge.notifyToWeb('%@');",
                       [json encodeURIComponent]];
     [_webView stringByEvaluatingJavaScriptFromString:call];
@@ -256,7 +258,8 @@
                 return NO;
             }
 
-            NSDictionary *notify = [json JSONValue];
+            NSData *jsonData = [json dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *notify = [jsonData JSONValue];
             if(notify) {
                 [self receivedMessage:notify];
             } else {
