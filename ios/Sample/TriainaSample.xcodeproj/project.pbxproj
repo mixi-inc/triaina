@@ -36,6 +36,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09C1AE6817521D90005791CC /* UIAlertView+BlocksExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+BlocksExtension.h"; path = "../Dependencies/UIAlertView+BlocksExtension.h"; sourceTree = "<group>"; };
+		09C1AE6917521D90005791CC /* UIAlertView+BlocksExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+BlocksExtension.m"; path = "../Dependencies/UIAlertView+BlocksExtension.m"; sourceTree = "<group>"; };
 		147D0BBC15B7B74C00453045 /* TriainaSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TriainaSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		147D0BC015B7B74C00453045 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		147D0BC215B7B74C00453045 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -157,6 +159,8 @@
 		147D0BE415B7B76500453045 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				09C1AE6817521D90005791CC /* UIAlertView+BlocksExtension.h */,
+				09C1AE6917521D90005791CC /* UIAlertView+BlocksExtension.m */,
 				147F4CE41682FCAD00C4D621 /* NSString+Util.h */,
 				147F4CE51682FCAD00C4D621 /* NSString+Util.m */,
 				147D0BE615B7B79900453045 /* Triaina */,
