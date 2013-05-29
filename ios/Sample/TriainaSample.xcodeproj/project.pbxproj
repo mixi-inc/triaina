@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09101FFB1756415E004823B0 /* UIAlertView+BlocksExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 09C1AE6917521D90005791CC /* UIAlertView+BlocksExtension.m */; };
 		09C1AE6E17523310005791CC /* NSObject+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 09C1AE6D17522F85005791CC /* NSObject+JSON.m */; };
 		09C1AE6F17523313005791CC /* NSData+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 09C1AE6B17522F85005791CC /* NSData+JSON.m */; };
 		147D0BC115B7B74C00453045 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 147D0BC015B7B74C00453045 /* UIKit.framework */; };
@@ -222,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09101FFB1756415E004823B0 /* UIAlertView+BlocksExtension.m in Sources */,
 				147D0BCD15B7B74C00453045 /* main.m in Sources */,
 				147D0BD115B7B74C00453045 /* TriainaSampleAppDelegate.m in Sources */,
 				147D0BD415B7B74C00453045 /* TriainaSampleViewController.m in Sources */,
