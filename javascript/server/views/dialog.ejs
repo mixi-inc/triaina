@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <%= include partials/header.ejs %>
+
+  </head>
+  <body>
+    <div class="dialog example">
+        <form>
+            <fieldset>
+                <label>title</label>
+                <input id="confirmTitle" type="text" placeholder="Type something…" value="Confirm">
+                <label>body</label>
+                <textarea id="confirmBody" placeholder="Type something…">This is sample message.</textarea>
+                <div>
+                    <button id="confirmSubmit" type="button" class="btn">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+  </body>
+  <%= include partials/script.ejs %>
+  <script src="javascripts/dialog.js"></script>
+</html>

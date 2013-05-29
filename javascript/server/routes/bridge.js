@@ -9,3 +9,7 @@ exports.sensor = function(req, res){
 exports.network = function(req, res){
     res.render('network', { title: 'Network' });
 };
+
+exports.dialog = function(req, res){
+    res.render('dialog', { title: 'Dialog' });
+};
