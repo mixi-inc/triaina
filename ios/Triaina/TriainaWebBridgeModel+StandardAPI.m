@@ -47,4 +47,14 @@
     [self.adapter.webView loadRequest:[NSURLRequest requestWithURL:URL]];
 }
 
+- (void)handleSystemNotificationNotifyRequestWithParams:(NSDictionary*)params
+                                               bridgeId:(NSString*)bridgeId
+{
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    notification.alertBody = [NSString stringWithFormat:@"%@ %@", params[@"title"], params[@"text"]];
+    notification.hasAction = NO;
+    notification.userInfo = params;
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+}
+
 @end
