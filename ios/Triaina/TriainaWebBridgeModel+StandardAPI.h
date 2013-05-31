@@ -14,5 +14,6 @@
 - (void)handleSystemDestIsAvailableRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
 - (void)handleSystemDialogConfirmRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
 - (void)handleSystemNetWebviewOpenRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId;
+- (void)handleSystemNotificationNotifyRequestWithParams:(NSDictionary*)params bridgeId:(NSString*)bridgeId;
 
 @end
