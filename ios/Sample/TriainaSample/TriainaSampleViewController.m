@@ -28,6 +28,7 @@
     webView.delegate = self;
     webView.webBridgeDelegate = self;
     webView.adapter.logFilter = TriainaLogTypeInfo;
+    webView.adapter.triainaEnabled = YES;
     
     [self updateButtons];
 }
