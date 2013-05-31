@@ -22,7 +22,7 @@ import triaina.webview.annotation.Layout;
 import triaina.webview.annotation.WebViewBridgeResouce;
 
 public class MainActivity extends TriainaFragmentActivity {
-	public static final String HOST = "10.63.245.16";
+	public static final String HOST = "10.0.2.2";
 	public static final int PORT = 3000;
 	
 
