@@ -44,7 +44,7 @@ public class FormPictureSelectResult implements Result {
 		return 0;
 	}
 	
-	public static class FormFile implements Parcelable {
+	public static class FormFile implements Result {
 		private String mId;
 		private String mFileName;
 		private String mThumbnail;
