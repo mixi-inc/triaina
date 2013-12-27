@@ -19,7 +19,7 @@ static const char kUIAlertViewBlocksExtensionBlockKey;
 {
     if(self = [super init]) {
         if(callback) {
-            b = Block_copy(callback);
+            b = [callback copy];
         }
     }
     return self;
@@ -32,13 +32,6 @@ static const char kUIAlertViewBlocksExtensionBlockKey;
     }
 }
 
-- (void)dealloc
-{
-    if(b) {
-        Block_release(b);
-    }
-    [super dealloc];
-}
 
 @end
 
@@ -60,7 +53,7 @@ static const char kUIAlertViewBlocksExtensionBlockKey;
         }
         va_end(args);
         
-        id delegate = [[[UIAlertViewCallback alloc] initWithCallback:callback] autorelease];
+        id delegate = [[UIAlertViewCallback alloc] initWithCallback:callback];
         objc_setAssociatedObject(self, &kUIAlertViewBlocksExtensionBlockKey, delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         self.delegate = delegate;
     }

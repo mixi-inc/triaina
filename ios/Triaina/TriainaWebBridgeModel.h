@@ -13,10 +13,10 @@
 
 @interface TriainaWebBridgeModel : NSObject
 
-@property(nonatomic, assign) TriainaWebViewAdapter *adapter;
-@property(nonatomic, assign) id<TriainaWebBridgeDelegate> delegate;
-@property(nonatomic, readonly) UIWebView *webView;
-@property(nonatomic, readonly) UIViewController *viewController;
+@property(nonatomic, weak) TriainaWebViewAdapter *adapter;
+@property(nonatomic, weak) id<TriainaWebBridgeDelegate> delegate;
+@property(weak, nonatomic, readonly) UIWebView *webView;
+@property(weak, nonatomic, readonly) UIViewController *viewController;
 
 // request/response dispatch
 - (SEL)requestHandlerForDest:(NSString *)dest;

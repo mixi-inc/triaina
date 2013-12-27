@@ -16,18 +16,18 @@
                           withString:@"\\"
                              options:0
                                range:NSMakeRange( 0 , [tstr length] )];
-    return [((NSString*)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+    return ((NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                                                 (CFStringRef)tstr,
                                                                 NULL,
                                                                 (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                                kCFStringEncodingUTF8)) autorelease];
+                                                                kCFStringEncodingUTF8)));
 }
 
 -(NSString*) decodeURIComponentes {
-    return [(NSString *) CFURLCreateStringByReplacingPercentEscapesUsingEncoding(
+    return (NSString *) CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(
                                                                                  NULL,
                                                                                  (CFStringRef) self,
                                                                                  CFSTR(""),
-                                                                                 kCFStringEncodingUTF8) autorelease];
+                                                                                 kCFStringEncodingUTF8));
 }
 @end

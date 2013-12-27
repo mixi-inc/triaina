@@ -28,7 +28,7 @@
 
 - (void)handleSystemDialogConfirmRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId
 {
-    [[[[UIAlertView alloc]
+    [[[UIAlertView alloc]
        initWithTitle:[params objectForKey:@"title"]
        message:[params objectForKey:@"body"]
        callback:^(NSInteger index) {
@@ -37,8 +37,7 @@
            [self.adapter respondToWebWithBridgeID:bridgeId result:result];
        }
        cancelButtonTitle:@"キャンセル"
-       otherButtonTitles:@"OK", nil]
-      autorelease] show];
+       otherButtonTitles:@"OK", nil] show];
 }
 
 - (void)handleSystemNetWebviewOpenRequestWithParams:(NSDictionary *)params bridgeId:(NSString *)bridgeId

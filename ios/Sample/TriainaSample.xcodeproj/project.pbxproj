@@ -308,6 +308,7 @@
 		147D0BDE15B7B74C00453045 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TriainaSample/TriainaSample-Prefix.pch";
 				INFOPLIST_FILE = "TriainaSample/TriainaSample-Info.plist";
@@ -320,6 +321,7 @@
 		147D0BDF15B7B74C00453045 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TriainaSample/TriainaSample-Prefix.pch";
 				INFOPLIST_FILE = "TriainaSample/TriainaSample-Info.plist";

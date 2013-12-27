@@ -40,18 +40,6 @@
     self.webView = nil;
 }
 
-- (void)dealloc
-{
-    self.webView = nil;
-    self.urlField = nil;
-    self.triainaButton = nil;
-    self.backButton = nil;
-    self.forwardButton = nil;
-    self.refreshButton = nil;
-    self.stopButton = nil;
-    
-    [super dealloc];
-}
 
 - (void)updateButtons
 {
