@@ -15,8 +15,8 @@
 
 @property(nonatomic, weak) TriainaWebViewAdapter *adapter;
 @property(nonatomic, weak) id<TriainaWebBridgeDelegate> delegate;
-@property(weak, nonatomic, readonly) UIWebView *webView;
-@property(weak, nonatomic, readonly) UIViewController *viewController;
+@property(nonatomic, weak, readonly) UIWebView *webView;
+@property(nonatomic, weak, readonly) UIViewController *viewController;
 
 // request/response dispatch
 - (SEL)requestHandlerForDest:(NSString *)dest;

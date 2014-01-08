@@ -23,8 +23,6 @@
 
 @implementation TriainaWebViewAdapter
 
-@dynamic webBridgeDelegate;
-
 - (id)init {
     return [self initWithWebView:nil];
 }
