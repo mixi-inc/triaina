@@ -35,6 +35,7 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     private TriainaEnvironment mEnvironment;
 
     private boolean mIsRestored;
+    private Bundle mWebViewStateOnDestroyView;
 
     final public String[] getDomains() {
         return mWebViewBridge.getDomainConfig().getDomains();
@@ -80,6 +81,7 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflatedView = mConfigurator.loadInflatedView(this, inflater, container);
         mWebViewBridge = mConfigurator.loadWebViewBridge(this, inflatedView);
+        mWebViewStateOnDestroyView = null;
         mConfigurator.configure(mWebViewBridge);
         mConfigurator.registerBridge(mWebViewBridge, this);
         configureSettings();
@@ -105,6 +107,8 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (mWebViewStateOnDestroyView != null)
+            outState.putAll(mWebViewStateOnDestroyView);
         // XXX
         if (mWebViewBridge != null)
             storeWebView(outState);
@@ -128,7 +132,9 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
 
     @Override
     public void onDestroyView() {
+        mWebViewStateOnDestroyView = new Bundle();
         try {
+            storeWebView(mWebViewStateOnDestroyView);
             mWebViewBridge.destroy();
         } catch (Exception exp) {
             Log.w(TAG, exp.getMessage() + "", exp);
