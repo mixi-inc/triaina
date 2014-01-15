@@ -133,12 +133,13 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     @Override
     public void onDestroyView() {
         mWebViewStateOnDestroyView = new Bundle();
+        storeWebView(mWebViewStateOnDestroyView);
         try {
-            storeWebView(mWebViewStateOnDestroyView);
             mWebViewBridge.destroy();
         } catch (Exception exp) {
             Log.w(TAG, exp.getMessage() + "", exp);
         }
+        mWebViewBridge = null;
         super.onDestroyView();
     }
 
