@@ -105,7 +105,6 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // XXX
         if (mWebViewBridge != null)
             storeWebView(outState);
     }
@@ -133,6 +132,7 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
         } catch (Exception exp) {
             Log.w(TAG, exp.getMessage() + "", exp);
         }
+        mWebViewBridge = null;
         super.onDestroyView();
     }
 
