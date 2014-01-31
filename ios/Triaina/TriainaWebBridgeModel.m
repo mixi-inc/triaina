@@ -11,17 +11,11 @@
 
 @interface TriainaWebBridgeModel()
 
-@property (nonatomic, retain) NSString *currentBridgeId;
+@property (nonatomic, strong) NSString *currentBridgeId;
 
 @end
 
 @implementation TriainaWebBridgeModel
-
-- (void)dealloc {
-    self.adapter = nil;
-    self.currentBridgeId = nil;
-    [super dealloc];
-}
 
 #pragma mark - properties
 
@@ -68,9 +62,15 @@
 - (void)receivedRequestWithBridgeId:(NSString *)bridgeId dest:(NSString *)dest params:(NSDictionary *)params {
     SEL handler = [self requestHandlerForDest:dest];
     if([_delegate respondsToSelector:handler]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [_delegate performSelector:handler withObject:params withObject:bridgeId];
+#pragma clang diagnostic pop
     } else if([self respondsToSelector:handler]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [self performSelector:handler withObject:params withObject:bridgeId];
+#pragma clang diagnostic pop
     } else {
         NSString *msg = [NSString stringWithFormat:@"dest: %@ is unsupported", dest];
         [_adapter log:msg type:TriainaLogTypeError];
@@ -81,9 +81,15 @@
 - (void)receivedResponseWithBridgeId:(NSString *)bridgeId dest:(NSString *)dest result:(NSDictionary *)result {
     SEL handler = [self responseHandlerForDest:dest];
     if([_delegate respondsToSelector:handler]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [_delegate performSelector:handler withObject:result withObject:bridgeId];
+#pragma clang diagnostic pop
     } else if([self respondsToSelector:handler]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [self performSelector:handler withObject:result withObject:bridgeId];
+#pragma clang diagnostic pop
     } else {
         NSString *msg = [NSString stringWithFormat:@"dest: %@ is unsupported", dest];
         [_adapter log:msg type:TriainaLogTypeError];

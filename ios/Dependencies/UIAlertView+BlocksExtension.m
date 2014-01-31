@@ -5,7 +5,7 @@
 #import "UIAlertView+BlocksExtension.h"
 #import <objc/runtime.h>
 
-static const NSString *kUIAlertViewBlocksExtensionBlockKey = @"kUIAlertViewBlocksExtensionBlockKey";
+static const char kUIAlertViewBlocksExtensionBlockKey;
 
 @interface UIAlertViewCallback : NSObject<UIAlertViewDelegate> {
     void (^b)(NSInteger index);
@@ -19,7 +19,7 @@ static const NSString *kUIAlertViewBlocksExtensionBlockKey = @"kUIAlertViewBlock
 {
     if(self = [super init]) {
         if(callback) {
-            b = Block_copy(callback);
+            b = [callback copy];
         }
     }
     return self;
@@ -32,13 +32,6 @@ static const NSString *kUIAlertViewBlocksExtensionBlockKey = @"kUIAlertViewBlock
     }
 }
 
-- (void)dealloc
-{
-    if(b) {
-        Block_release(b);
-    }
-    [super dealloc];
-}
 
 @end
 
@@ -60,8 +53,8 @@ static const NSString *kUIAlertViewBlocksExtensionBlockKey = @"kUIAlertViewBlock
         }
         va_end(args);
         
-        id delegate = [[[UIAlertViewCallback alloc] initWithCallback:callback] autorelease];
-        objc_setAssociatedObject(self, kUIAlertViewBlocksExtensionBlockKey, delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        id delegate = [[UIAlertViewCallback alloc] initWithCallback:callback];
+        objc_setAssociatedObject(self, &kUIAlertViewBlocksExtensionBlockKey, delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         self.delegate = delegate;
     }
     return self;

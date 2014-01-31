@@ -14,7 +14,7 @@
 @dynamic webBridgeDelegate;
 
 - (void)prepareAdapter {
-    self.adapter = [[[TriainaWebViewAdapter alloc] initWithWebView:self] autorelease];
+    self.adapter = [[TriainaWebViewAdapter alloc] initWithWebView:self];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -33,10 +33,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.adapter = nil;
-    [super dealloc];
-}
 
 // override delegate getter
 - (id)delegate 

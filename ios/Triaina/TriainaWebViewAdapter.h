@@ -22,15 +22,15 @@ typedef enum {
 
 @property (nonatomic, assign) BOOL triainaEnabled;
 @property (nonatomic, readonly) BOOL triainaInitialized;
-@property (nonatomic, retain) NSString *triainaAllowedDomain;
+@property (nonatomic, strong) NSString *triainaAllowedDomain;
 @property (nonatomic, assign) BOOL consoleEnabled;
 @property (nonatomic, readonly) BOOL consoleInitialized;
 @property (nonatomic, assign) TriainaLogType logFilter;
 
-@property (nonatomic, retain) IBOutlet TriainaWebBridgeModel *model;
-@property (nonatomic, assign) IBOutlet UIWebView *webView;
-@property (nonatomic, assign) IBOutlet id<UIWebViewDelegate> webViewDelegate;
-@property (nonatomic, assign) IBOutlet id<TriainaWebBridgeDelegate> webBridgeDelegate;
+@property (nonatomic, strong) TriainaWebBridgeModel *model;
+@property (nonatomic, weak) UIWebView *webView;
+@property (nonatomic, weak) id<UIWebViewDelegate> webViewDelegate;
+@property (nonatomic, weak) id<TriainaWebBridgeDelegate> webBridgeDelegate;
 
 - (id)initWithWebView:(UIWebView *)webView;
 - (id)initWithWebView:(UIWebView *)webView model:(TriainaWebBridgeModel *)model;

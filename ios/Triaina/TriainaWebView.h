@@ -11,8 +11,8 @@
 
 @interface TriainaWebView : UIWebView
 
-@property (nonatomic, retain) TriainaWebViewAdapter *adapter;
-@property (nonatomic, assign) IBOutlet id webBridgeDelegate;
+@property (nonatomic, strong) TriainaWebViewAdapter *adapter;
+@property (nonatomic, weak) IBOutlet id webBridgeDelegate;
 
 - (void)prepareAdapter; // override if model-class is overridden.
 

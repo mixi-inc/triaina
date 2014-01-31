@@ -11,10 +11,10 @@
 
 @interface TriainaSampleViewController : UIViewController <UIWebViewDelegate, TriainaWebBridgeDelegate>
 
-@property (nonatomic, retain) IBOutlet TriainaWebView *webView;
-@property (nonatomic, retain) IBOutlet UITextField *urlField;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *triainaButton;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *backButton, *forwardButton, *refreshButton, *stopButton;
+@property (nonatomic, strong) IBOutlet TriainaWebView *webView;
+@property (nonatomic, strong) IBOutlet UITextField *urlField;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *triainaButton;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *backButton, *forwardButton, *refreshButton, *stopButton;
 
 - (IBAction)triainaButtonTapped:(id)sender;
 - (IBAction)backButtonTapped:(id)sender;

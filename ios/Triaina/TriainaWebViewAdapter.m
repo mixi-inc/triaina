@@ -15,7 +15,7 @@
 
 @interface TriainaWebViewAdapter()
 
-@property (nonatomic, retain) NSString *sessionKey;
+@property (nonatomic, strong) NSString *sessionKey;
 
 - (void)receivedMessage:(NSDictionary*)message;
 
@@ -28,7 +28,7 @@
 }
 
 - (id)initWithWebView:(UIWebView *)aWebView {
-    TriainaWebBridgeModel *aModel = [[[TriainaWebBridgeModel alloc] init] autorelease];
+    TriainaWebBridgeModel *aModel = [[TriainaWebBridgeModel alloc] init];
     return [self initWithWebView:aWebView model:aModel];
 }
 
@@ -44,18 +44,9 @@
     return self;
 }
 
-- (void)dealloc {
-    self.model = nil;
-    self.webView = nil;
-    self.webViewDelegate = nil;
-    self.webBridgeDelegate = nil;
-    self.sessionKey = nil;
-    [super dealloc];
-}
-
 #pragma mark - properties
 
-- (id)webViewDelegate
+- (id)webBridgeDelegate
 {
     return _model.delegate;
 }
