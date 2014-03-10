@@ -10,6 +10,8 @@ public class UriUtilsTest extends TestCase {
 		Uri uri = Uri.parse("http://aaa.example.com");
 		assertEquals(true, UriUtils.compareDomain(uri, "example.com"));
 		assertEquals(true, UriUtils.compareDomain(uri, "aaa.example.com"));
+		assertEquals(true, UriUtils.compareDomain(uri, "example.com:10000"));
+		assertEquals(true, UriUtils.compareDomain(uri, "aaa.example.com:10000"));
 		
 		uri = Uri.parse("http://example.com");
 		assertEquals(false, UriUtils.compareDomain(uri, "aaa.example.com"));			
