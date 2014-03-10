@@ -13,20 +13,27 @@ public final class UriUtils {
         }
 
         //in case domain string contains port values we need to make sure we are getting right value
-        // we will need only host, so we only need scheme to parse url
+        //we will need only host, so we only need scheme to parse url
         Uri domainUri = Uri.parse("http://" + domain);
 
-        String host = uri.getHost();
-        domain = domainUri.getHost();
+        String originialDomain = uri.getHost();
+        String targetDomain = domainUri.getHost();
 
-        int d = host.length() - domain.length();
-        if (d < 0) {
+        int diff = originialDomain.length() - targetDomain.length();  
+        
+        if (diff < 0) {  //hosts do not match or originialDomain and targetDomain subdomains does not match
             return false;
-        } else if (d > 0) {
-            if (host.substring(d - 1).charAt(0) != '.')
-                return false;
+        } else if (diff > 0) { // hosts do not match, but this might be because originialDomain might have a subdomain
+            if (hostHasMatchingSubdomain(diff, originialDomain))
+                return false; // original domain does not have a subdomain or subdomains does not match
         }
 
-        return domain.equals(host.substring(d));
+        return targetDomain.equals(originialDomain.substring(diff));
     }
+
+
+    private static boolean hostHasMatchingSubdomain(int diff, String originalDomain) {
+        return originalDomain.substring(diff - 1).charAt(0) != '.';
+    }
+
 }
