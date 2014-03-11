@@ -30,6 +30,8 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -197,12 +199,21 @@ public class WebViewBridge extends WebView {
 
         // workaround for some device
         try {
+            detachFromParent();
             mDeviceBridgeProxy.destroy();
             super.destroy();
         } catch (Exception exp) {
             Log.w(TAG, exp.getMessage() + "", exp);
         } finally {
             mIsDestroyed = true;
+        }
+    }
+    
+    
+    private void detachFromParent() {
+        ViewParent parent = this.getParent();
+        if (parent != null && parent instanceof ViewGroup) { //sanity check
+            ((ViewGroup) parent).removeAllViews();
         }
     }
 
