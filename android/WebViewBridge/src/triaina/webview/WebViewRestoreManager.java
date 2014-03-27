@@ -47,10 +47,10 @@ public class WebViewRestoreManager {
 				long id = savedInstanceState.getLong(EXTRA_WEBVIEW_ID);
 				File tmp = new File(mContext.getCacheDir(), WEBVIEW_TMP_FILE
 						+ "." + id);
-				if (!webViewBridge.restorePicture(pictureBundle, tmp)) {
-					Log.w(TAG, "failed to restore webview picture state");
-					return false;
-				}
+//				if (!webViewBridge.restorePicture(pictureBundle, tmp)) {
+//					Log.w(TAG, "failed to restore webview picture state");
+//					return false;
+//				}
 			}
 		} catch (NullPointerException e) {
 			// sometimes, especially repeating fast orientation
@@ -78,8 +78,8 @@ public class WebViewRestoreManager {
 			Bundle webViewPictureBundle = new Bundle();
 			File tmp = new File(mContext.getCacheDir(), WEBVIEW_TMP_FILE + "."
 					+ id);
-			if (!webViewBridge.savePicture(webViewPictureBundle, tmp))
-				Log.w(TAG, "failed to save webview picture");
+//			if (!webViewBridge.savePicture(webViewPictureBundle, tmp))
+//				Log.w(TAG, "failed to save webview picture");
 			outState.putBundle(EXTRA_WEBVIEW_PICTURE, webViewPictureBundle);
 			outState.putLong(EXTRA_WEBVIEW_ID, id);
 		}

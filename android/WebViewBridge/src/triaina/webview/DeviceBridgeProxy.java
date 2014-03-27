@@ -7,6 +7,8 @@ import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import android.webkit.JavascriptInterface;
+
 
 import triaina.commons.exception.InvocationRuntimeException;
 import triaina.commons.exception.JSONConvertException;
@@ -87,6 +89,7 @@ public class DeviceBridgeProxy {
         }
     }
 
+    @JavascriptInterface
     public void notifyToDevice(String data) {
         final String jsonText = decode(data);
         logging("notified", jsonText);
