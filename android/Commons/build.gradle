@@ -8,6 +8,10 @@ android {
     compileSdkVersion "Google Inc.:Google APIs:16"
     buildToolsVersion "19.0.3"
 
+    lintOptions {
+        abortOnError false
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
