@@ -23,6 +23,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.Resources.Theme;
 import android.database.DatabaseErrorHandler;
@@ -34,6 +35,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.UserHandle;
+import android.view.Display;
 
 public class MockContext extends Context {
 	public MockParams params;
@@ -318,7 +321,49 @@ public class MockContext extends Context {
 		
 	}
 
-	@Override
+    @Override
+    public Context createDisplayContext(Display display) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Context createConfigurationContext(Configuration overrideConfiguration) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void removeStickyBroadcastAsUser(Intent intent, UserHandle user) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendStickyBroadcastAsUser(Intent intent, UserHandle user) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendStickyOrderedBroadcastAsUser(Intent intent, UserHandle user, BroadcastReceiver resultReceiver, Handler scheduler, int initialCode, String initialData, Bundle initialExtras) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendOrderedBroadcastAsUser(Intent intent, UserHandle user, String receiverPermission, BroadcastReceiver resultReceiver, Handler scheduler, int initialCode, String initialData, Bundle initialExtras) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendBroadcastAsUser(Intent intent, UserHandle user, String receiverPermission) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendBroadcastAsUser(Intent intent, UserHandle user) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
 	public Intent registerReceiver(BroadcastReceiver receiver,
 			IntentFilter filter) {
 		// TODO Auto-generated method stub
