@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+    <!-- This layout file is used by WebViewBridge tests only. This has been moved from the tests
+    folder into the library project for Android Studio support. Apparently gradle treats test
+    projects as part of the main project so specifying resources or manifest files separately is
+    not allowed as of now-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"

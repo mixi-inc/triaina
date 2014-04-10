@@ -126,7 +126,7 @@ public abstract class AbstractWebViewBridgeActivity extends TriainaActivity {
     }
     
     protected void storeWebView(Bundle outState) {
-        mRestoreManager.storeWebView(mWebViewBridge, outState, getTaskId());        
+        mRestoreManager.storeWebView(mWebViewBridge, outState);
     }
 
     @Override

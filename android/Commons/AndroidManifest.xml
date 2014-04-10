@@ -5,6 +5,9 @@
     android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="7" />
+
+    <!--these permissions are required for the test project. Surprisingly gradle does not allow you to have customized
+     AndroidManifest files separately for test projects. The manifest files for tests are automatically generated -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
