@@ -16,3 +16,17 @@ gen/
 local.properties
 
 *~
+
+# Android Studio crap
+.idea/
+.gradle
+/*/local.properties
+/*/out
+/*/build/*
+/*/*/production
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
+traces.txt

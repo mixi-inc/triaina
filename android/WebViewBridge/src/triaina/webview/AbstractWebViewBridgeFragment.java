@@ -110,7 +110,7 @@ public abstract class AbstractWebViewBridgeFragment extends TriainaFragment {
     }
 
     protected void storeWebView(Bundle outState) {
-        mRestoreManager.storeWebView(mWebViewBridge, outState, getActivity().getTaskId());
+        mRestoreManager.storeWebView(mWebViewBridge, outState);
     }
 
     @Override
