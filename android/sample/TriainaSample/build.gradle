@@ -1,7 +1,10 @@
 apply plugin: 'android'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    // the exclude for 'android-support-v4.jar' is for Eclipse IDE compatibility,
+    // so we can continue to keep the support library under /libs
+    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-v4.jar')
+    compile 'com.android.support:support-v4:19.1.0'
     compile project(':triaina:android:lib:HttpClientMultipart')
     compile project(':triaina:android:Commons')
     compile project(':triaina:android:Injector')
