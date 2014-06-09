@@ -13,7 +13,11 @@ dependencies {
 
 android {
     compileSdkVersion 16
-    buildToolsVersion "19.0.3"
+    buildToolsVersion "19.1.0"
+
+    lintOptions {
+        abortOnError false
+    }
 
     sourceSets {
         main {
