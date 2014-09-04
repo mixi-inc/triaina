@@ -4,13 +4,19 @@ dependencies {
     // the exclude for 'android-support-v4.jar' is for Eclipse IDE compatibility,
     // so we can continue to keep the support library under /libs
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-v4.jar')
-    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.android.support:support-v4:19.+'
+
+    // manage javax.inject.jar via mavenCentral().
+    // android-library plugin currently does not support declaration of maven repos.
+    // Repositories should be declared in root level build.gradle
+    compile 'javax.inject:javax.inject:1'
+
     compile project(':triaina:android:Commons')
 }
 
 android {
     compileSdkVersion "Google Inc.:Google APIs:16"
-    buildToolsVersion "19.0.3"
+    buildToolsVersion "19.1.0"
 
     sourceSets {
         main {
