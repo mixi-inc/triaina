@@ -1,29 +1,10 @@
 package triaina.webview;
 
-import java.net.URLEncoder;
-import java.util.Map;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import triaina.commons.exception.SecurityRuntimeException;
-import triaina.commons.json.JSONConverter;
-import triaina.commons.utils.JSONObjectUtils;
-import triaina.commons.utils.UriUtils;
-import triaina.webview.DeviceBridgeProxy;
-import triaina.webview.config.BridgeObjectConfig;
-import triaina.webview.config.DomainConfig;
-import triaina.webview.entity.Error;
-import triaina.webview.entity.Params;
-import triaina.webview.entity.Result;
-import triaina.webview.exception.SkipDomainCheckRuntimeException;
-
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -36,6 +17,25 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import org.json.JSONObject;
+
+import triaina.commons.exception.SecurityRuntimeException;
+import triaina.commons.json.JSONConverter;
+import triaina.commons.utils.JSONObjectUtils;
+import triaina.commons.utils.SystemUtils;
+import triaina.commons.utils.UriUtils;
+import triaina.webview.config.BridgeObjectConfig;
+import triaina.webview.config.DomainConfig;
+import triaina.webview.entity.Error;
+import triaina.webview.entity.Params;
+import triaina.webview.entity.Result;
+import triaina.webview.exception.SkipDomainCheckRuntimeException;
+
+import java.net.URLEncoder;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class WebViewBridge extends WebView {
     public static final float VERSION = 1.2F;
@@ -173,6 +173,10 @@ public class WebViewBridge extends WebView {
 
             String s = json.toString();
             Log.d(TAG, "Notify to Web with " + s);
+
+            if(SystemUtils.getTargetSdkVersion(getContext()) >= Build.VERSION_CODES.KITKAT) {
+                s = s.replace("\\", "\\\\"); // for Kitkat(19) inner browser(Chrome)
+            }
 
             String js = mHelper.makeJavaScript("WebBridge.notifyToWeb", URLEncoder.encode(s, "UTF-8").replace("+", "%20"));
 
