@@ -1,7 +1,9 @@
 package triaina.commons.utils;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 
 public final class SystemUtils {
@@ -21,4 +23,11 @@ public final class SystemUtils {
         }).start();
     }
 
+    public static int getTargetSdkVersion(Context context){
+        if(context == null) return -1;
+
+        ContextWrapper contextWrapper = new ContextWrapper(context);
+        ApplicationInfo applicationInfo = contextWrapper.getApplicationInfo();
+        return applicationInfo.targetSdkVersion;
+    }
 }
