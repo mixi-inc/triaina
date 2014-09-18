@@ -8,7 +8,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion "Google Inc.:Google APIs:18"
+    compileSdkVersion "Google Inc.:Google APIs:19"
     buildToolsVersion "19.1.0"
 
     lintOptions {
