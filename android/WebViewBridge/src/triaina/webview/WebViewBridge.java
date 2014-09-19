@@ -20,10 +20,14 @@ import android.webkit.WebViewClient;
 
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import triaina.commons.exception.SecurityRuntimeException;
 import triaina.commons.json.JSONConverter;
 import triaina.commons.utils.JSONObjectUtils;
-import triaina.commons.utils.SystemUtils;
 import triaina.commons.utils.UriUtils;
 import triaina.webview.config.BridgeObjectConfig;
 import triaina.webview.config.DomainConfig;
@@ -31,11 +35,6 @@ import triaina.webview.entity.Error;
 import triaina.webview.entity.Params;
 import triaina.webview.entity.Result;
 import triaina.webview.exception.SkipDomainCheckRuntimeException;
-
-import java.net.URLEncoder;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class WebViewBridge extends WebView {
     public static final float VERSION = 1.2F;
@@ -174,7 +173,7 @@ public class WebViewBridge extends WebView {
             String s = json.toString();
             Log.d(TAG, "Notify to Web with " + s);
 
-            if(SystemUtils.getTargetSdkVersion(getContext()) >= Build.VERSION_CODES.KITKAT) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
                 s = s.replace("\\", "\\\\"); // for Kitkat(19) inner browser(Chrome)
             }
 
