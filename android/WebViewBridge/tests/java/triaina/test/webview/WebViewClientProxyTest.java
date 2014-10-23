@@ -12,6 +12,8 @@ import triaina.webview.config.DomainConfig;
 public class WebViewClientProxyTest extends TestCase {
     private DomainConfig mConfig;
 
+    private static final String WRONG_URL = "http://mix.jp";
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -30,7 +32,7 @@ public class WebViewClientProxyTest extends TestCase {
     public void testOriginalOnPageStartedOnException() {
         try {
             WebViewClient client = new WebViewClientProxy(new WebViewClient(), mConfig);
-            client.onPageStarted(null, "http://mix.jp", null);
+            client.onPageStarted(null, WRONG_URL, null);
             fail();
         } catch (SecurityRuntimeException e) {
             assertTrue(true);
@@ -42,7 +44,7 @@ public class WebViewClientProxyTest extends TestCase {
     public void testOnPageStartedOnExceptionWithoutExceptionResolver() {
         try {
             WebViewClient client = new WebViewClientProxy(new WebViewClient(), mConfig, null);
-            client.onPageStarted(null, "http://mix.jp", null);
+            client.onPageStarted(null, WRONG_URL, null);
             fail();
         } catch (SecurityRuntimeException e) {
             assertTrue(true);
@@ -56,11 +58,11 @@ public class WebViewClientProxyTest extends TestCase {
             SecurityRuntimeExceptionResolver resolver = new SecurityRuntimeExceptionResolver() {
                 @Override
                 public void resolve(SecurityRuntimeException e) {
-                    assertTrue(true);
+                    assertEquals(WRONG_URL, e.getUrl());
                 }
             };
             WebViewClient client = new WebViewClientProxy(new WebViewClient(), mConfig, resolver);
-            client.onPageStarted(null, "http://mix.jp", null);
+            client.onPageStarted(null, WRONG_URL, null);
         } catch (SecurityRuntimeException e) {
             fail();
         } catch (Exception e) {
