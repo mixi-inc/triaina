@@ -266,7 +266,7 @@ public class WebViewBridge extends WebView {
 
             SecurityRuntimeException exception = new SecurityRuntimeException("cannot load " + url);
             if(mSecurityRuntimeExceptionResolver != null){
-                mSecurityRuntimeExceptionResolver.resolve(new SecurityRuntimeException());
+                mSecurityRuntimeExceptionResolver.resolve(exception);
             } else {
                 throw exception;
             }
