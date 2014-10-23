@@ -46,6 +46,12 @@ public class WebViewBridge extends WebView {
     private Handler mHandler;
     private DomainConfig mDomainConfig;
 
+    public static interface SecurityRuntimeExceptionResolver {
+        public void resolve(SecurityRuntimeException e);
+    }
+
+    private SecurityRuntimeExceptionResolver mSecurityRuntimeExceptionResolver;
+
     private DeviceBridgeProxy mDeviceBridgeProxy;
 
     private WebViewBridgeHelper mHelper = new WebViewBridgeHelper();
@@ -71,7 +77,11 @@ public class WebViewBridge extends WebView {
     }
 
     public void setWebViewClient(WebViewClient client) {
-        super.setWebViewClient(new WebViewClientProxy(client, mDomainConfig));
+        super.setWebViewClient(new WebViewClientProxy(client, mDomainConfig, mSecurityRuntimeExceptionResolver));
+    }
+
+    public void setSecurityRuntimeExceptionResolver(SecurityRuntimeExceptionResolver resolver){
+        mSecurityRuntimeExceptionResolver = resolver;
     }
 
     public void setDomainConfig(DomainConfig domainConfig) {
@@ -223,10 +233,16 @@ public class WebViewBridge extends WebView {
     public static class WebViewClientProxy extends WebViewClient {
         private WebViewClient mWebViewClient;
         private DomainConfig mDomainConfig;
+        private SecurityRuntimeExceptionResolver mSecurityRuntimeExceptionResolver;
 
         public WebViewClientProxy(WebViewClient webViewClient, DomainConfig domainConfig) {
+            this(webViewClient, domainConfig, null);
+        }
+
+        public WebViewClientProxy(WebViewClient webViewClient, DomainConfig domainConfig, SecurityRuntimeExceptionResolver resolver) {
             mWebViewClient = webViewClient;
             mDomainConfig = domainConfig;
+            mSecurityRuntimeExceptionResolver = resolver;
         }
 
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -248,7 +264,12 @@ public class WebViewBridge extends WebView {
                     return;
             }
 
-            throw new SecurityRuntimeException("cannot load " + url);
+            SecurityRuntimeException exception = new SecurityRuntimeException("cannot load " + url);
+            if(mSecurityRuntimeExceptionResolver != null){
+                mSecurityRuntimeExceptionResolver.resolve(new SecurityRuntimeException());
+            } else {
+                throw exception;
+            }
         }
 
         public void onPageFinished(WebView view, String url) {
