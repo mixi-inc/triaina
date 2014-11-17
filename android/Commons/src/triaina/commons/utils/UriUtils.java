@@ -1,4 +1,3 @@
-
 package triaina.commons.utils;
 
 import android.net.Uri;
@@ -18,9 +17,10 @@ public final class UriUtils {
 
         String originialDomain = uri.getHost();
         String targetDomain = domainUri.getHost();
+        if (originialDomain == null || targetDomain == null) return false;
 
-        int diff = originialDomain.length() - targetDomain.length();  
-        
+        int diff = originialDomain.length() - targetDomain.length();
+
         if (diff < 0) {  //hosts do not match or originialDomain and targetDomain subdomains does not match
             return false;
         } else if (diff > 0) { // hosts do not match, but this might be because originialDomain might have a subdomain
