@@ -75,10 +75,11 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
 
         // XXX post only
         // TODO other methods
-        if (POST_METHOD.equals(method))
+        if (POST_METHOD.equals(method)) {
             request = createPostRequest(mParams, job.getCookie());
-        else
+        } else {
             Log.d(TAG, "sorry " + method + " method is not implemented yet");
+        }
 
         showProgressNotification(job.getNotificationId(), mParams.getNotification());
         OkHttpClient client = null;
@@ -89,8 +90,7 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
             NetHttpSendResult result = new NetHttpSendResult();
             buildResult(result, response);
 
-            if (receiver != null)
-                succeed(job, receiver, result, mParams);
+            if (receiver != null) succeed(job, receiver, result, mParams);
         } catch (IOException exp) {
             return false;
         } finally {
@@ -101,8 +101,7 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
     }
 
     private void showProgressNotification(Integer id, SendNotificationParams params) {
-        if (id == null || params == null)
-            return;
+        if (id == null || params == null) return;
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(
                 WorkerService.ACTION_CANCEL_TASK), 0);
@@ -119,8 +118,7 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
     }
 
     private void showCompletedNotification(Integer id, SendNotificationParams params) {
-        if (id == null || params == null)
-            return;
+        if (id == null || params == null) return;
 
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, new Intent(),
                 Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -165,8 +163,9 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
 
         Headers headers = response.headers();
         Bundle bundle = new Bundle();
-        for (int i = 0; i < headers.size(); i++)
+        for (int i = 0; i < headers.size(); i++) {
             bundle.putString(headers.name(i), headers.value(i));
+        }
 
         result.setHeaders(bundle);
 
@@ -210,8 +209,7 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
     private RequestBody createMultipartRequestBody(NetHttpSendParams params) {
         Bundle body = params.getBody();
 
-        if (body == null)
-            return null;
+        if (body == null) return null;
 
         MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
 
