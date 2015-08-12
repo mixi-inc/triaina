@@ -1,42 +1,33 @@
 package triaina.webview.worker;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.protocol.HTTP;
-
-import com.android.internal.http.multipart.FilePart;
-import com.android.internal.http.multipart.MultipartEntity;
-import com.android.internal.http.multipart.Part;
-import com.android.internal.http.multipart.StringPart;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Set;
+
 import triaina.commons.http.CommonHttpClient;
 import triaina.commons.utils.BundleUtils;
-import triaina.commons.utils.InputStreamUtils;
 import triaina.commons.workerservice.AbstractNetworkWorker;
 import triaina.commons.workerservice.WorkerService;
 import triaina.webview.entity.Result;
@@ -80,30 +71,20 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
         }
 
         String method = mParams.getMethod();
-        Bundle headers = mParams.getHeaders();
-        HttpRequest request = null;
+        Request request = null;
 
         // XXX post only
         // TODO other methods
         if (POST_METHOD.equals(method))
-            request = createHttpPost(mParams);
+            request = createPostRequest(mParams, job.getCookie());
         else
             Log.d(TAG, "sorry " + method + " method is not implemented yet");
 
-        if (headers != null)
-            buildHeader(request, headers);
-
-        String cookie = job.getCookie();
-        if (cookie != null)
-            buildCookie(request, cookie);
-
         showProgressNotification(job.getNotificationId(), mParams.getNotification());
-        HttpClient client = null;
+        OkHttpClient client = null;
         try {
-            Uri uri = Uri.parse(mParams.getUrl());
-            HttpHost host = new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
             client = CommonHttpClient.newInstance();
-            HttpResponse response = client.execute(host, request);
+            Response response = client.newCall(request).execute();
 
             NetHttpSendResult result = new NetHttpSendResult();
             buildResult(result, response);
@@ -179,84 +160,86 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
         receiver.send(code, null);
     }
 
-    private void buildResult(NetHttpSendResult result, HttpResponse response) throws IllegalStateException, IOException {
-        result.setCode(response.getStatusLine().getStatusCode() + "");
+    private void buildResult(NetHttpSendResult result, Response response) throws IllegalStateException, IOException {
+        result.setCode(response.code() + "");
 
-        Header[] headers = response.getAllHeaders();
+        Headers headers = response.headers();
         Bundle bundle = new Bundle();
-        for (Header header : headers)
-            bundle.putString(header.getName(), header.getValue());
+        for (int i = 0; i < headers.size(); i++)
+            bundle.putString(headers.name(i), headers.value(i));
 
         result.setHeaders(bundle);
 
-        HttpEntity entity = response.getEntity();
-        String res = entity != null ? InputStreamUtils.toString(entity.getContent()) : null;
+        ResponseBody responseBody = response.body();
+        String res = responseBody != null ? responseBody.string() : null;
         result.setResponseText(res);
     }
 
-    private void buildHeader(HttpRequest request, Bundle headers) {
-        if (MULTIPART.equals(BundleUtils.getStringByCaseInsensitive(headers, CONTENT_TYPE)))
-            return;
-
-        Set<String> keys = headers.keySet();
-        for (String key : keys)
-            request.setHeader(key, headers.getString(key));
-    }
-
-    private void buildCookie(HttpRequest request, String cookie) {
-        request.setHeader("Cookie", cookie);
-    }
-
-    private HttpPost createHttpPost(NetHttpSendParams params) throws UnsupportedEncodingException,
-            FileNotFoundException {
-        HttpPost post = new HttpPost(params.getUrl());
+    private Request createPostRequest(NetHttpSendParams params, String cookie) {
         Bundle headers = params.getHeaders();
-        HttpEntity entity;
+        RequestBody requestBody;
 
         if (headers != null && MULTIPART.equals(BundleUtils.getStringByCaseInsensitive(headers, CONTENT_TYPE))) {
-            entity = createMultipartEntity(params);
-            post.setHeader(entity.getContentType());
-        } else
-            entity = createEntity(params);
+            requestBody = createMultipartRequestBody(params);
+        } else {
+            String contentType = null;
+            if (headers != null) {
+                contentType = BundleUtils.getStringByCaseInsensitive(headers, CONTENT_TYPE);
+            }
+            requestBody = createRequestBody(params, contentType);
+        }
 
-        if (entity != null)
-            post.setEntity(entity);
+        Request.Builder builder = new Request.Builder()
+                .url(params.getUrl())
+                .post(requestBody);
 
-        return post;
+        if (headers != null && !MULTIPART.equals(BundleUtils.getStringByCaseInsensitive(headers, CONTENT_TYPE))) {
+            Set<String> keys = headers.keySet();
+            for (String key : keys) {
+                builder.addHeader(key, headers.getString(key));
+            }
+        }
+
+        if (cookie != null) {
+            builder.addHeader("Cookie", cookie);
+        }
+
+        return builder.build();
     }
 
-    private HttpEntity createMultipartEntity(NetHttpSendParams params) throws FileNotFoundException {
-        MultipartEntity entity = null;
+    private RequestBody createMultipartRequestBody(NetHttpSendParams params) {
         Bundle body = params.getBody();
 
         if (body == null)
             return null;
 
+        MultipartBuilder builder = new MultipartBuilder().type(MultipartBuilder.FORM);
+
         Set<String> keys = body.keySet();
-        List<Part> parts = new ArrayList<Part>();
 
         for (String key : keys) {
             String rawBody = body.getString(key);
             if (rawBody != null) {
-                parts.add(new StringPart(key, rawBody, HTTP.UTF_8));
+                builder.addFormDataPart(key, rawBody);
                 continue;
             }
 
             Bundle part = body.getBundle(key);
             if (part != null) {
-                if (FILE_TYPE.equals(part.getString("type")))
-                    parts.add(new FilePart(key, new File(part.getString("value"))));
+                if (FILE_TYPE.equals(part.getString("type"))) {
+                    File file = new File(part.getString("value"));
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+                    builder.addFormDataPart(key, file.getName(), requestBody);
+                }
                 continue;
             }
         }
 
-        if (parts.size() > 0)
-            entity = new MultipartEntity(parts.toArray(new Part[parts.size()]));
-
-        return entity;
+        return builder.build();
     }
 
-    private HttpEntity createEntity(NetHttpSendParams params) throws UnsupportedEncodingException {
-        return params.getRawBody() == null ? null : new StringEntity(params.getRawBody(), HTTP.UTF_8);
+    private RequestBody createRequestBody(NetHttpSendParams params, String contentType) {
+        MediaType mediaType = MediaType.parse(contentType == null ? "text/plain" : contentType);
+        return params.getRawBody() == null ? null : RequestBody.create(mediaType, params.getRawBody());
     }
 }
