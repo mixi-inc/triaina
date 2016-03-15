@@ -9,14 +9,19 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class FixedHttpClient {
     private static String sUserAgent = "android";
+    private static final int CONNECTION_TIMEOUT_SECONDS = 20;
 
     private static Context mApplicationContext = null;
 
     public static OkHttpClient newInstance() {
         OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        client.setReadTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        client.setWriteTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         client.networkInterceptors().add(new UserAgentInterceptor(getUserAgentString()));
         return client;
     }
