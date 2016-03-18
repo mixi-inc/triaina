@@ -4,5 +4,6 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+  var demos = ['basic', 'sensor', 'network', 'dialog'];
+  res.render('index', { title: 'Express' , demos: demos});
 };
