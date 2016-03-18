@@ -283,7 +283,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView
 {
-    if([self triainaAllowed]) {
+    if([self triainaAllowed] && aWebView.loading==NO) {
         if(self.consoleEnabled && !self.consoleInitialized)
             [self initializeConsole];
 
