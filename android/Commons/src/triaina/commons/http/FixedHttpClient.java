@@ -18,7 +18,7 @@ public class FixedHttpClient {
 
     private static Context mApplicationContext = null;
 
-    public static OkHttpClient getInstance() {
+    public static synchronized OkHttpClient getInstance() {
         if (sOkHttpClient == null) {
             sOkHttpClient = new OkHttpClient();
             sOkHttpClient.setConnectTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
