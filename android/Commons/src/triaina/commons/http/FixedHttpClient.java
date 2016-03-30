@@ -14,16 +14,19 @@ import java.util.concurrent.TimeUnit;
 public class FixedHttpClient {
     private static String sUserAgent = "android";
     private static final int CONNECTION_TIMEOUT_SECONDS = 20;
+    private static OkHttpClient sOkHttpClient;
 
     private static Context mApplicationContext = null;
 
-    public static OkHttpClient newInstance() {
-        OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        client.setReadTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        client.setWriteTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        client.networkInterceptors().add(new UserAgentInterceptor(getUserAgentString()));
-        return client;
+    public static synchronized OkHttpClient getInstance() {
+        if (sOkHttpClient == null) {
+            sOkHttpClient = new OkHttpClient();
+            sOkHttpClient.setConnectTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            sOkHttpClient.setReadTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            sOkHttpClient.setWriteTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            sOkHttpClient.networkInterceptors().add(new UserAgentInterceptor(getUserAgentString()));
+        }
+        return sOkHttpClient;
     }
 
     public static void setApplicationContext(Context applicationContext) {

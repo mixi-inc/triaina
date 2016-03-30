@@ -21,13 +21,12 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 import triaina.commons.http.CommonHttpClient;
 import triaina.commons.utils.BundleUtils;
+import triaina.commons.utils.CloseableUtils;
 import triaina.commons.workerservice.AbstractNetworkWorker;
 import triaina.commons.workerservice.WorkerService;
 import triaina.webview.entity.Result;
@@ -83,9 +82,10 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
 
         showProgressNotification(job.getNotificationId(), mParams.getNotification());
         OkHttpClient client = null;
+        Response response = null;
         try {
-            client = CommonHttpClient.newInstance();
-            Response response = client.newCall(request).execute();
+            client = CommonHttpClient.getInstance();
+            response = client.newCall(request).execute();
 
             NetHttpSendResult result = new NetHttpSendResult();
             buildResult(result, response);
@@ -94,6 +94,7 @@ public class HttpRequestWorker extends AbstractNetworkWorker<HttpRequestJob> {
         } catch (IOException exp) {
             return false;
         } finally {
+            if (response != null) CloseableUtils.close(response.body());
             CommonHttpClient.closeInstance(client);
         }
 

@@ -10,9 +10,9 @@ public class CommonHttpClient {
 	private static final String TAG = "CommonHttpClient";
 	private static Class<?> mProtoType = FixedHttpClient.class;
 
-	public static OkHttpClient newInstance() {
+	public static OkHttpClient getInstance() {
 		try {
-			Method method = mProtoType.getMethod("newInstance");
+			Method method = mProtoType.getMethod("getInstance");
 			return (OkHttpClient)method.invoke(null);
 		} catch (Exception exp) {
 			Log.e(TAG, exp.getMessage() + "", exp);
@@ -27,7 +27,7 @@ public class CommonHttpClient {
 	public static Class<?> getProtoType() {
 		return mProtoType;
 	}
-	
+
 	public static void closeInstance(OkHttpClient instance) {
 		// do nothing
 	}
