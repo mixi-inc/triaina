@@ -1,4 +1,4 @@
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -6,8 +6,8 @@ dependencies {
 }
 
 android {
-    compileSdkVersion "Google Inc.:Google APIs:16"
-    buildToolsVersion "19.1.0"
+    compileSdkVersion "Google Inc.:Google APIs:22"
+    buildToolsVersion "23.0.3"
 
     lintOptions {
         abortOnError false
